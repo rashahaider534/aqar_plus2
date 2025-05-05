@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Middleware\SellerAuth;
+use App\Http\Middleware\UserAuth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -12,7 +14,10 @@ return Application::configure(basePath: dirname(__DIR__))
         health: '/up',
     )
     ->withMiddleware(function (Middleware $middleware) {
-        //
+       $middleware->alias([
+        'CheckUser'=>UserAuth::class,
+        'CheckSeller'=>SellerAuth::class,
+       ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {
         //
