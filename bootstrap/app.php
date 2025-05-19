@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Middleware\AdminAuth;
+use App\Http\Middleware\MaintenanceAuth;
 use App\Http\Middleware\SellerAuth;
+use App\Http\Middleware\SuperAdminAuth;
 use App\Http\Middleware\UserAuth;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
@@ -17,6 +20,9 @@ return Application::configure(basePath: dirname(__DIR__))
        $middleware->alias([
         'CheckUser'=>UserAuth::class,
         'CheckSeller'=>SellerAuth::class,
+        'CheckAdmin'=>AdminAuth::class,
+        'CheckMaintenance'=>MaintenanceAuth::class,
+        'CheckSuperAdmin'=>SuperAdminAuth::class,
        ]);
     })
     ->withExceptions(function (Exceptions $exceptions) {

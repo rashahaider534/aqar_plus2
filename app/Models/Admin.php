@@ -2,9 +2,24 @@
 
 namespace App\Models;
 
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 
-class Admin extends Model
+class Admin extends Authenticatable
 {
-    //
+     use HasFactory, Notifiable,HasApiTokens;
+      protected $guarded=['id'];
+      public function balance__requests(){
+      return $this->hasMany(Balance_Request::class,'balance__requests');
+   }
+     public function blocks(){
+      return $this->hasMany(Block::class,'blocks');
+   }
+        public function rejecteds(){
+    return $this->hasMany(Rejected::class,'rejecteds');
+   }
+
 }

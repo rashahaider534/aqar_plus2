@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Http\Requests\LoginRequest;
 use App\Http\Requests\RegisterRequest;
 use App\Mail\welcome;
+use App\Models\Admin;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -14,7 +15,7 @@ use Illuminate\Support\Facades\Mail;
 class AuthController extends Controller
 {
     
-    public function register_user(RegisterRequest $request)
+ public function register_user(RegisterRequest $request)
     {
         $filePath = null;//profile_photos/default_profile_photo.png
         if ($request->hasFile('profile_photo')) {
@@ -28,35 +29,47 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
             'profile_photo' => $filePath,
             'email'=>$request->email,
-            'code'=>$code
+            'code'=>$code,
+            'balance'=>1000
         ]);
         $token = $user->CreateToken('user_active')->plainTextToken;
         Mail::to($user->email)->send(new welcome($code));
         return response()->json([
-            'message' => 'register successful',
+            'message' => 'تم إنشاء حساب',
             'token' => $token
         ], 201);
     }
-    public function login_user(LoginRequest $request)
-    {
-        if (!Auth::attempt($request->only('email', 'password')))
-            return response()->json(['message' => 'invalid email or password'], 401);
-        $user = User::where('email', $request->email)->FirstOrFail();
+ public function login_user(Request $request) {
+        $user=User::where('name', $request->name)->first();
+        if(!$user)
+          return response()->json(['message'=>'الاسم غير موجود',401]);
+        if(!Hash::check($request->password, $user->password))
+          return response()->json(['message'=>'كلمة السر خاطئة',401]);
         if(!$user->in_code)
-        return response()->json(['message' => 'enter your code'], 401);
-        $token = $user->CreateToken('user_active')->plainTextToken;
-        return response()->json([
-            'message' => 'login successful',
-            'token' => $token
-        ], 200);}
-    
-    public function logout(Request  $request){
+         return response()->json(['message'=>'قم بتأكيد بريدك الالكتروني',401]);
+         $token = $user->createToken('user_active')->plainTextToken;
+          return response()->json([
+        'message' => 'تم تسجيل الدخول',
+        'token' => $token
+         ], 200); 
+     }
+ public function login_admin(Request $request)  {
+     $admin=Admin::where('name', $request->name)->first();
+        if(!$admin)
+          return response()->json(['message'=>'الاسم غير موجود',401]);
+        if(!Hash::check($request->password, $admin->password))
+          return response()->json(['message'=>'كلمة السر خاطئة',401]);
+         $token = $admin->createToken('user_active')->plainTextToken;
+          return response()->json([
+        'message' => 'تم تسجيل الدخول',
+        'token' => $token
+         ], 200); 
+     }
+ public function logout(Request  $request){
         $request->user()->currentAccessToken()->delete();
         return response()->json(['message'=>'logout successfully']);
-       
-    }
-    
-    public function checkcode(Request  $request){
+         }
+ public function checkcode(Request  $request){
         $user=Auth::user();
         $code=$request->code;
        if($code==$user->code)
@@ -71,7 +84,11 @@ class AuthController extends Controller
        else
        return response()->json([
         'message' => 'Incorrect code',
-    ], 422);
+      ], 422);
     }
+   
+   
+    
+    
 
 }

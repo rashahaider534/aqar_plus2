@@ -44,16 +44,24 @@ class User extends Authenticatable
     public function favoriteByUsers(){
         return $this->belongsToMany(User::class,'favorites');
     }
-    public function comments(){
-        return $this->hasMany(Comment::class,'comments');
-        }
-        public function likes(){
-            return $this->hasMany(Like::class,'likes');
-            }
-            public function ratings(){
-                return $this->hasMany(Rating::class,'ratings');
-                }
-                public function complaints(){
-                    return $this->hasMany(Complaint::class,'complaints');
-                    }
+   
+   public function ratings(){
+      return $this->hasMany(Rating::class,'ratings');
+   }
+    public function rentals(){
+      return $this->hasMany(Rental::class,'rentals');
+   }
+      public function purchases(){
+      return $this->hasMany(Purchase::class,'purchases');
+   }
+       public function bookings(){
+      return $this->hasMany(Booking::class,'bookings');
+   }
+      public function balance__requests(){
+      return $this->hasMany(Balance_Request::class,'balance__requests');
+   }
+   public function block(){
+    return $this->hasOne(Block::class,'blocks');
+   }
+             
 }
