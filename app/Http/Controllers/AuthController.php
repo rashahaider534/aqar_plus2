@@ -63,7 +63,7 @@ class AuthController extends Controller
             'token' => $token
         ], 201);
     }
- public function login_user(Request $request) {
+ public function login_user(LoginRequest $request) {
         $user=User::where('name', $request->name)->first();
         if(!$user)
           return response()->json(['message'=>'الاسم غير موجود',401]);
@@ -78,7 +78,7 @@ class AuthController extends Controller
          ], 200); 
      }
 
- public function login_admin(Request $request)  {
+ public function login_admin(LoginRequest $request)  {
      $admin=Admin::where('name', $request->name)->first();
         if(!$admin)
           return response()->json(['message'=>'الاسم غير موجود',401]);
