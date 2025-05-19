@@ -39,6 +39,30 @@ class AuthController extends Controller
             'token' => $token
         ], 201);
     }
+     public function register_seller(RegisterRequest $request)
+    {
+        $filePath = null;//profile_photos/default_profile_photo.png
+        if ($request->hasFile('profile_photo')) {
+            $file = $request->file('profile_photo');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs('profile_photos', $fileName, 'public'); // Saves in storage/app/public/profile_photos
+        }
+         $code=rand(10000,99999);
+        $user = User::create([
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+            'profile_photo' => $filePath,
+            'email'=>$request->email,
+            'code'=>$code,
+            'type'=>'seller'
+        ]);
+        $token = $user->CreateToken('user_active')->plainTextToken;
+        Mail::to($user->email)->send(new welcome($code));
+        return response()->json([
+            'message' => 'تم إنشاء حساب',
+            'token' => $token
+        ], 201);
+    }
  public function login_user(Request $request) {
         $user=User::where('name', $request->name)->first();
         if(!$user)
@@ -53,6 +77,7 @@ class AuthController extends Controller
         'token' => $token
          ], 200); 
      }
+
  public function login_admin(Request $request)  {
      $admin=Admin::where('name', $request->name)->first();
         if(!$admin)

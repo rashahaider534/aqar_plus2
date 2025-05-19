@@ -25,11 +25,7 @@ class LoginRequest extends FormRequest
             'name' => 'required|exists:users,name',
               'password' => [
                 'required',
-                'string',
-                'min:8',
-                'confirmed',
-                'regex:/[a-zA-Z]/', // يحتوي على حروف
-                'regex:/[0-9]/'     // يحتوي على أرقام
+                    // يحتوي على أرقام
               ],
             ];
     }
