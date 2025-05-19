@@ -1,20 +1,18 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
-//admin
-Route::middleware(['auth:sanctum'])->group(function () { 
 
-Route::get('/', function () {
-    return view('welcome');
+//Admin
+Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
+Route::post('logout',[AuthController::class,'logout']);
 });
+//SuperAdmin
+Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
+Route::post('logout',[AuthController::class,'logout']);
 });
-
-//user
-Route::middleware(['auth:sanctum','CheckUser'])->group(function () {
-
-});
-//seller
-Route::middleware(['auth:sanctum','CheckSeller'])->group(function () {
-
+//Maintenance
+Route::prefix('Maintenance')->middleware(['auth:sanctum','CheckMaintenance'])->group(function () {
+Route::post('logout',[AuthController::class,'logout']);
 });

@@ -4,8 +4,9 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Rating extends Model
+class Rental extends Model
 {
+  
     public function property(){
         return $this->belongsTo(Property::class);
     }

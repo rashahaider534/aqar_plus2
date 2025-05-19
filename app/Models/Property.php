@@ -12,21 +12,26 @@ class Property extends Model
     public function images(){
         return $this->hasMany(Image::class,'images');
         }
-        public function discounts(){
-            return $this->hasMany(Discount::class,'discounts');
-            }
             public function favoriteProperties(){
                 return $this->belongsToMany(Property::class,'favorites');
             }
-            public function comments(){
-                return $this->hasMany(Comment::class,'comments');
-                }
-                public function likes(){
-                    return $this->hasMany(Like::class,'likes');
-                    }
-                    public function ratings(){
-                        return $this->hasMany(Rating::class,'ratings');
-                        }
+                public function ratings(){
+                      return $this->hasMany(Rating::class,'ratings');
+                       }
+                     public function rentals(){
+                        return $this->hasMany(Rental::class,'rentals');
+                        }   
+                        public function purchases(){
+                           return $this->hasMany(Purchase::class,'purchases');
+                          }
+                           
+              public function bookings(){
+      return $this->hasMany(Booking::class,'bookings');
+   }
+     public function rejected(){
+    return $this->hasOne(Rejected::class,'rejecteds');
+   }
+        
                
     
 }

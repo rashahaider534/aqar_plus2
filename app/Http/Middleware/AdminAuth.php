@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
-class SellerAuth
+class AdminAuth
 {
     /**
      * Handle an incoming request.
@@ -16,13 +16,12 @@ class SellerAuth
      */
     public function handle(Request $request, Closure $next): Response
     {
-        $user = Auth::user();
+         $user = $request->user();
     
-        if ($user && $user->type == 'seller') {
+        if ($user && $user->type == 'admin') {
             return $next($request);
         }
     
         return response()->json(['message' => 'لا يمكنك الدخول'], 403);
     }
-    
 }

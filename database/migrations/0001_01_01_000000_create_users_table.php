@@ -17,14 +17,15 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
+             $table->string('bank_code')->unique()->nullable();
+            $table->integer('phone')->nullable();
             $table->string('type')->default('user');
-            $table->boolean('ban')->default(0);
             $table->string('code')->nullable();
             $table->boolean('in_code')->default(0);
+            $table->boolean('consent')->default(0);
             $table->integer('balance')->default(0);
             $table->string('profile_photo')->nullable();
-            $table->string('status')->nullable();
-            $table->integer('phone')->nullable();
+
             $table->rememberToken();
             $table->timestamps();
         });
