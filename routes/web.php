@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\AuthController;
 use Illuminate\Support\Facades\Route;
 
 //admin
@@ -18,4 +19,3 @@ Route::middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::middleware(['auth:sanctum','CheckSeller'])->group(function () {
 
 });
-//rasha

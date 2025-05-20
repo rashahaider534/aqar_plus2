@@ -22,12 +22,20 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => ['required', 'email'] ,
-            'password' => [
+            'name' => 'required',
+              'password' => [
                 'required',
-                'string',
-                
-                'min:8', 
-        ]];
+                    // يحتوي على أرقام
+              ],
+            ];
+    }
+    public function messages(): array
+    {
+        return [
+            'name.required' => 'يرجى إدخال اسم المستخدم.',
+            'name.exists' => 'المستخدم غير موجود، يمكنك إنشاء حساب جديد.',
+
+            'password.required' => 'يرجى إدخال كلمة السر.',
+        ];
     }
 }

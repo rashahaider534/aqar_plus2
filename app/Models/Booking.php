@@ -4,12 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Like extends Model
+class Booking extends Model
 {
-    public function properties(){
+     public function property(){
         return $this->belongsTo(Property::class);
     }
-    public function users(){
+    public function user(){
         return $this->belongsTo(User::class);
     }
 }
