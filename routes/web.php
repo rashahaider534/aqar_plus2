@@ -3,7 +3,7 @@
 use Illuminate\Support\Facades\Route;
 
 //admin
-Route::middleware(['auth:sanctum'])->group(function () { 
+Route::middleware(['auth:sanctum'])->group(function () {
 
 Route::get('/', function () {
     return view('welcome');
@@ -18,3 +18,4 @@ Route::middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::middleware(['auth:sanctum','CheckSeller'])->group(function () {
 
 });
+//rasha
