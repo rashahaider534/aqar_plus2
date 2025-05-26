@@ -13,7 +13,9 @@ return new class extends Migration
     {
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('purchases_id')->constrained('purchases')->onDelete('cascade');
+            $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
+            $table->float('price');
+            $table->boolean('status');
             $table->string('type');
             $table->string('status')->default('waiting');
             $table->time('requested_at');
