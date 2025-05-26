@@ -11,7 +11,6 @@ Route::post('/user/login',[AuthController::class,'login_user']);
 Route::post('/seller/login',[AuthController::class,'login_user']);
 Route::post('/Admin/login',[AuthController::class,'login_admin']);
 Route::post('/Super_Admin/login',[AuthController::class,'login_admin']);
-Route::post('/Maintenance/login',[AuthController::class,'login_admin']);
 
 
 //user
@@ -32,10 +31,7 @@ Route::post('logout',[AuthController::class,'logout']);
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
 Route::post('logout',[AuthController::class,'logout']);
 });
-//Maintenance
-Route::prefix('Maintenance')->middleware(['auth:sanctum','CheckMaintenance'])->group(function () {
-Route::post('logout',[AuthController::class,'logout']);
-});
+
 
 
 

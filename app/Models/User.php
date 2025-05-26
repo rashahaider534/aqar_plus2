@@ -57,9 +57,7 @@ class User extends Authenticatable
        public function bookings(){
       return $this->hasMany(Booking::class,'bookings');
    }
-      public function balance__requests(){
-      return $this->hasMany(Balance_Request::class,'balance__requests');
-   }
+    
    public function block(){
     return $this->hasOne(Block::class,'blocks');
    }
