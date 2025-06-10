@@ -15,9 +15,8 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->float('price');
-            $table->boolean('status');
             $table->string('type');
-            $table->string('status')->default('waiting');
+           $table->string('status')->default('waiting');
             $table->time('requested_at');
             $table->text('description')->nullable();
             $table->timestamps();

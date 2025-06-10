@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('code')->nullable();
             $table->boolean('in_code')->default(0);
             $table->boolean('consent')->default(0);
+             $table->string('name_admin')->nullable();
             $table->integer('balance')->default(0);
             $table->string('profile_photo')->nullable();
 
