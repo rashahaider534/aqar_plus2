@@ -77,6 +77,22 @@ class AuthController extends Controller
         'token' => $token
          ], 200); 
      }
+     public function login_seller(LoginRequest $request) {
+        $user=User::where('name', $request->name)->first();
+        if(!$user)
+          return response()->json(['message'=>'الاسم غير موجود',401]);
+        if(!Hash::check($request->password, $user->password))
+          return response()->json(['message'=>'كلمة السر خاطئة',401]);
+        if(!$user->in_code)
+         return response()->json(['message'=>'قم بتأكيد بريدك الالكتروني',401]);
+        if(!$user->consent)
+        return response()->json(['message'=>'لا يمكنك الدخول حتى يتم الموافقة على حسابك من قبل البرنامج',401]);
+         $token = $user->createToken('user_active')->plainTextToken;
+          return response()->json([
+        'message' => 'تم تسجيل الدخول',
+        'token' => $token
+         ], 200); 
+     }
 
  public function login_admin(LoginRequest $request)  {
      $admin=Admin::where('name', $request->name)->first();
