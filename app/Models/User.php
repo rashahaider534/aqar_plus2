@@ -44,22 +44,21 @@ class User extends Authenticatable
     public function favoriteByUsers(){
         return $this->belongsToMany(User::class,'favorites');
     }
-   
    public function ratings(){
-      return $this->hasMany(Rating::class,'ratings');
+      return $this->hasMany(Rating::class);
    }
     public function rentals(){
-      return $this->hasMany(Rental::class,'rentals');
+      return $this->hasMany(Rental::class);
    }
       public function purchases(){
-      return $this->hasMany(Purchase::class,'purchases');
+      return $this->hasMany(Purchase::class);
    }
        public function bookings(){
-      return $this->hasMany(Booking::class,'bookings');
+      return $this->hasMany(Booking::class);
    }
     
    public function block(){
-    return $this->hasOne(Block::class,'blocks');
+    return $this->hasOne(Block::class);
    }
              
 }

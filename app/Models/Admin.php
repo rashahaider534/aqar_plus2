@@ -14,10 +14,10 @@ class Admin extends Authenticatable
       protected $guarded=['id'];
    
      public function blocks(){
-      return $this->hasMany(Block::class,'blocks');
+      return $this->hasMany(Block::class);
    }
         public function rejecteds(){
-    return $this->hasMany(Rejected::class,'rejecteds');
+    return $this->hasMany(Rejected::class);
    }
 
 }
