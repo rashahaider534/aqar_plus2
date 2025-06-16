@@ -5,10 +5,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
     
 Route::post('user/register',[AuthController::class,'register_user']);
-Route::post('seller/register',[AuthController::class,'register_seller']);
-
+//login
 Route::post('/user/login',[AuthController::class,'login_user']);
-Route::post('/seller/login',[AuthController::class,'login_seller']);
 Route::post('/Admin/login',[AuthController::class,'login_admin']);
 Route::post('/Super_Admin/login',[AuthController::class,'login_admin']);
 
