@@ -19,6 +19,7 @@ return new class extends Migration
             $table->date('start_rentals');
             $table->date('end_rentals');
             $table->boolean('active')->default(1);
+             $table->integer('National Number');
             $table->timestamps();
         });
     }

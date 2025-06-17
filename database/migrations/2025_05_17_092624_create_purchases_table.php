@@ -14,11 +14,12 @@ return new class extends Migration
         Schema::create('purchases', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
            // $table->string('type');
             $table->time('purchase_date');
             $table->string('identity_document');
             $table->string('image_file');
+             $table->integer('National Number');
             $table->timestamps();
         });
     }
