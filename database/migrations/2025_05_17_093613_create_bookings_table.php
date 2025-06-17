@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('bookings', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
-            $table->foreignId('user_id')->constrained('users')->onDelete('cascade'); 
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
             $table->time('start_rentals');
             $table->time('end_rentals');
             $table->boolean('active')->default(1);
+             $table->integer('National Number');
             $table->timestamps();
         });
     }
