@@ -49,15 +49,8 @@ class AuthController extends Controller
           return response()->json(['message'=>'كلمة السر خاطئة'],401);
         if(!$user->in_code)
          return response()->json(['message'=>'قم بتأكيد بريدك الالكتروني'],401);
-        // $reject=Block::where('',$user->id)->first();
          if($user->block)
-<<<<<<< HEAD
          return response()->json(['message'=>'نعتذر ولكن حسابك محظور',401]);
-
-=======
-         return response()->json(['message'=>'نعتذر ولكن حسابك محظور'],401);
-        
->>>>>>> 84eefa064ecf3d255c965eb52089eafd32eb87e5
          $token = $user->createToken('user_active')->plainTextToken;
           return response()->json([
         'message' => 'تم تسجيل الدخول',

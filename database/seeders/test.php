@@ -21,7 +21,7 @@ class test extends Seeder
             
                 'name' => 'Super Admin',
                 'password' => Hash::make('password123'), // غير كلمة السر كما تريد
-                'type' => 'supersdmin', // أو 'super_admin' حسب النظام عندك
+                'type' => 'superadmin', // أو 'super_admin' حسب النظام عندك
             
         ]);
     }

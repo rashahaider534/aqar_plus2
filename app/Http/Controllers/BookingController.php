@@ -27,6 +27,9 @@ class BookingController extends Controller
              'start_rentals'=>now()->toDateString(),
              'end_rentals'=>now()->addDays(5)->toDateString()
             ]);
+            $property->update([
+                'status'=>'booked'
+            ]);
             BookingEnd::dispatch($booking->id,$user->id,$property->name)->delay(now()->addDays(5));
             return response()->json(['message'=>'تم الحجز بنجاح'],201);
         }
@@ -35,6 +38,9 @@ class BookingController extends Controller
         $booking=Booking::where('id',$request->booking_id)->first();
         $property=Property::where('id',$booking->property_id)->first();
         $seller=User::where('id',$property->seller_id)->first();
+         $property->update([
+                'status'=>'waiting'
+            ]);
         $seller->update([
              'balance'=>$seller->balance+$property->final_price*0.2
             ]);
