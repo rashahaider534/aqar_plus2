@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Booking extends Model
 {
+     protected $guarded=['id'];
      public function property(){
         return $this->belongsTo(Property::class);
     }
