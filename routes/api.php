@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\BookingController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
     
@@ -13,8 +14,11 @@ Route::post('/Super_Admin/login',[AuthController::class,'login_admin']);
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
+Route::post('booking',[BookingController::class,'booking']);
+Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('logout',[AuthController::class,'logout']);
-  Route::post('checkcode',[AuthController::class,'checkcode']);  
+Route::post('checkcode',[AuthController::class,'checkcode']);  
+
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
