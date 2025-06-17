@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Property extends Model
 {
+    protected $guarded = [];
     public function province(){
         return $this->belongsTo(Province::class);
     }
@@ -23,10 +24,10 @@ class Property extends Model
    }
     public function rentals(){
      return $this->hasMany(Rental::class);
-   }   
+   }
      public function purchases(){
       return $this->hasMany(Purchase::class);
-   }                       
+   }
      public function bookings(){
       return $this->hasMany(Booking::class);
    }
@@ -36,7 +37,7 @@ class Property extends Model
       public function maintenances(){
       return $this->hasMany(Maintenance::class);
    }
-        
-               
-    
+
+
+
 }

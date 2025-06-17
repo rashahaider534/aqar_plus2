@@ -19,7 +19,8 @@ return new class extends Migration
             $table->time('purchase_date');
             $table->string('identity_document');
             $table->string('image_file');
-             $table->integer('National Number');
+            $table->string('full_name');
+             $table->integer('National_Number');
             $table->timestamps();
         });
     }
