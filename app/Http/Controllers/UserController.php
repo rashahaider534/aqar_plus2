@@ -4,26 +4,48 @@ namespace App\Http\Controllers;
 
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
+use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 
 class UserController extends Controller
 {
     public function showprofile()
     {
-         $user = Auth::user();
-         return response()->json(
+        $user = Auth::user();
+        return response()->json(
             [
-                'name'=>$user->name,
+                'name' => $user->name,
                 'email' => $user->email,
                 'balance' => $user->balance,
-                'phone'=>$user->phone,
-                'profile_photo'=>$user->profile_photo
-                 ? asset('storage/'. $user->profile_photo)
-                 : null,
-            ],200
-            );
+                'phone' => $user->phone,
+                'profile_photo' => $user->profile_photo
+                    ? asset('storage/' . $user->profile_photo)
+                    : null,
+            ],
+            200
+        );
     }
-    public function  updatephoto()
+    public function  updatephoto(Request $request)
     {
-        
+        $user = Auth::user();
+        if (!$request->hasFile('profile_photo')) {
+            return response()->json(['meesage' => 'يرجى ادخال صورة'], 400);
+        }
+        if ($user->profile_photo && Storage::disk('public')->exists($user->profile_photo)) {
+            Storage::disk('public')->delete($user->profile_photo);
+        }
+        $file = $request->file('profile_photo');
+        $fileName = time() . '.' . $file->getClientOriginalExtension();
+        $path = $file->storeAs('profile_photos', $fileName, 'public');
+        //تحقق من ان الملف المرفوع صورة
+        if (!$file->isValid() || !in_array($file->extension(), ['jpg', 'jpeg', 'png', 'gif', 'webp']))
+        {
+            return response()->json(['message' => 'الملف المرفوع ليس صورة صالحة'], 400);
+        }
+        $user->update([
+            'profile_photo' => $path
+        ]);
+
+        return response()->json(['meesage' => 'تم تعديل الصورة بنجاح'], 200);
     }
 }
