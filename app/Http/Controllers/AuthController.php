@@ -44,15 +44,20 @@ class AuthController extends Controller
  public function login_user(LoginRequest $request) {
         $user=User::where('name', $request->name)->first();
         if(!$user)
-          return response()->json(['message'=>'الاسم غير موجود',401]);
+          return response()->json(['message'=>'الاسم غير موجود'],401);
         if(!Hash::check($request->password, $user->password))
-          return response()->json(['message'=>'كلمة السر خاطئة',401]);
+          return response()->json(['message'=>'كلمة السر خاطئة'],401);
         if(!$user->in_code)
-         return response()->json(['message'=>'قم بتأكيد بريدك الالكتروني',401]);
+         return response()->json(['message'=>'قم بتأكيد بريدك الالكتروني'],401);
         // $reject=Block::where('',$user->id)->first();
          if($user->block)
+<<<<<<< HEAD
          return response()->json(['message'=>'نعتذر ولكن حسابك محظور',401]);
 
+=======
+         return response()->json(['message'=>'نعتذر ولكن حسابك محظور'],401);
+        
+>>>>>>> 84eefa064ecf3d255c965eb52089eafd32eb87e5
          $token = $user->createToken('user_active')->plainTextToken;
           return response()->json([
         'message' => 'تم تسجيل الدخول',
@@ -62,9 +67,9 @@ class AuthController extends Controller
  public function login_admin(LoginRequest $request)  {
      $admin=Admin::where('name', $request->name)->first();
         if(!$admin)
-          return response()->json(['message'=>'الاسم غير موجود',401]);
+          return response()->json(['message'=>'الاسم غير موجود'],401);
         if(!Hash::check($request->password, $admin->password))
-          return response()->json(['message'=>'كلمة السر خاطئة',401]);
+          return response()->json(['message'=>'كلمة السر خاطئة'],401);
          $token = $admin->createToken('user_active')->plainTextToken;
           return response()->json([
         'message' => 'تم تسجيل الدخول',
@@ -73,7 +78,7 @@ class AuthController extends Controller
      }
  public function logout(Request  $request){
         $request->user()->currentAccessToken()->delete();
-        return response()->json(['message'=>'logout successfully']);
+        return response()->json(['message'=>'logout successfully'],200);
          }
  public function checkcode(Request  $request){
         $user=Auth::user();

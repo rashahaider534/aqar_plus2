@@ -1,7 +1,11 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+<<<<<<< HEAD
 use App\Http\Controllers\UserController;
+=======
+use App\Http\Controllers\BookingController;
+>>>>>>> 84eefa064ecf3d255c965eb52089eafd32eb87e5
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -14,9 +18,16 @@ Route::post('/Super_Admin/login',[AuthController::class,'login_admin']);
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
+Route::post('booking',[BookingController::class,'booking']);
+Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('logout',[AuthController::class,'logout']);
+<<<<<<< HEAD
   Route::post('checkcode',[AuthController::class,'checkcode']);
   Route::get('showprofile',[UserController::class,'showprofile']);
+=======
+Route::post('checkcode',[AuthController::class,'checkcode']);  
+
+>>>>>>> 84eefa064ecf3d255c965eb52089eafd32eb87e5
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
