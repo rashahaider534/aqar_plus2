@@ -39,6 +39,7 @@ Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::get('showprofile',[UserController::class,'showprofile']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::post('buy',[PurchaseController::class,'Purchase']);
+Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
@@ -52,6 +53,7 @@ Route::get('properties',[PropertyController::class,'seller_properties']);
 Route::post('logout',[AuthController::class,'logout']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::post('buy',[PurchaseController::class,'Purchase']);
+Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
