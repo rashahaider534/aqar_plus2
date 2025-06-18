@@ -15,10 +15,10 @@ use App\Notifications\SendDocument;
 
 class PurchaseController extends Controller
 {
-    public  function Purchase(Request $request, $id)
+    public  function Purchase(Request $request)
     {
         $user = Auth::user();
-        $property = Property::findOrFail($id);
+        $property = Property::findOrFail($request->property_id);
         $price = $property->final_price;
         $commission = $price * 0.03; // 3%
         $purchprice = $price - $commission;

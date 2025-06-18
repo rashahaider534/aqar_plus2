@@ -38,7 +38,7 @@ Route::get('showprofile',[UserController::class,'showprofile']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::get('showprofile',[UserController::class,'showprofile']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
-Route::post('buy/{id}',[PurchaseController::class,'Purchase']);
+Route::post('buy',[PurchaseController::class,'Purchase']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
