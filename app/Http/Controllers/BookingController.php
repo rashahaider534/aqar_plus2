@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Jobs\BookingEnd;
+use App\Models\Admin;
 use App\Models\Booking;
 use App\Models\Property;
 use App\Models\User;
@@ -59,5 +60,10 @@ class BookingController extends Controller
             return response()->json(['message'=>'ليس لديك مال كافي للحجز'],401);
         $superadmin_price=$property->final_price*0.03;
         $seller_price=($property->final_price-($property->final_price*0.2))-$superadmin_price;
+          $superAdmin = Admin::find(1);
+        if ($superAdmin) {
+            $superAdmin->balance += $superadmin_price;
+            $superAdmin->save();
+        }
     } 
 }
