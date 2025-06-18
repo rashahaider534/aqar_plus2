@@ -10,14 +10,16 @@ use Illuminate\Notifications\Notification;
 class SendDocument extends Notification
 {
     use Queueable;
-     protected $purchase,$sellername;
+
+    protected $purchase, $sellername;
+
     /**
      * Create a new notification instance.
      */
-    public function __construct($purchase,$sellername)
+    public function __construct($purchase, $sellername)
     {
         $this->purchase = $purchase;
-        $this->sellername=$sellername;
+        $this->sellername = $sellername;
     }
 
     /**
@@ -35,14 +37,32 @@ class SendDocument extends Notification
      */
     public function toMail(object $notifiable): MailMessage
     {
+        $buyer = $this->purchase->full_name;
+        $seller = $this->sellername;
+        $property = $this->purchase->property->name;
+        $date = $this->purchase->purchase_date->format('Y-m-d');
+        $amount = number_format($this->purchase->property->final_price);
+
+        $document = <<<EOD
+في هذا اليوم الموافق {$date}، تم الاتفاق بين:
+
+الطرف الأول: السيد/السيدة {$seller} (المالك الحالي)،  
+والطرف الثاني: السيد/السيدة {$buyer} (المشتري الجديد)،
+
+حيث أقر الطرف الأول بأنه قد باع ونقل إلى الطرف الثاني العقار المسمى "{$property}" نقلاً كاملاً ونهائيًا، وتم الاتفاق على مبلغ قدره {$amount} ل.س، وتم دفعه بالكامل من قبل الطرف الثاني.
+
+ويقر الطرف الثاني بقبوله نقل الملكية ويتعهد بتحمل كافة الالتزامات القانونية والمالية المتعلقة بالعقار اعتبارًا من تاريخ الشراء.
+
+تم تحرير هذه الوثيقة والتوقيع عليها من الطرفين بكامل إرادتهما.
+
+مع تحياتنا،
+فريق المنصة.
+EOD;
+
         return (new MailMessage)
-            ->greeting('مرحبًا ' .$this->purchase->full_name)
+            ->greeting('مرحبًا ' . $buyer)
             ->line('تم نقل ملكية العقار إليك بنجاح.')
-            ->line('من السيد :'.$this->sellername)
-            ->line('اسم العقار: ' . $this->purchase->property->name)
-            ->line('تاريخ الشراء: ' . $this->purchase->purchase_date->format('Y-m-d'))
-            ->line('المبلغ المدفوع: ' . number_format($this->purchase->property->final_price) . ' ل.س')
-            // ->action('عرض تفاصيل العقار', url('/properties/' . $this->purchase->property_id))
+            ->line($document)
             ->line('شكرًا لاستخدامك منصتنا!');
     }
 
@@ -58,3 +78,4 @@ class SendDocument extends Notification
         ];
     }
 }
+
