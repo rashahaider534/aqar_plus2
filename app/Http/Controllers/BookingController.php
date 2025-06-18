@@ -39,7 +39,7 @@ class BookingController extends Controller
         $property=Property::where('id',$booking->property_id)->first();
         $seller=User::where('id',$property->seller_id)->first();
          $property->update([
-                'status'=>'waiting'
+                'status'=>'available'
             ]);
         $seller->update([
              'balance'=>$seller->balance+$property->final_price*0.2
