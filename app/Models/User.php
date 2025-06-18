@@ -60,5 +60,8 @@ class User extends Authenticatable
    public function block(){
     return $this->hasOne(Block::class);
    }
+     public function properties(){
+    return $this->hasMany(Property::class,'seller_id','id');
+   }
              
 }

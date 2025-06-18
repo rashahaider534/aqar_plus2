@@ -17,9 +17,9 @@ class UserController extends Controller
                 'balance' => $user->balance,
                 'phone'=>$user->phone,
                 'profile_photo'=>$user->profile_photo
-                 ? asset('storage/profile_photos/'  . $user->profile_photo)
+                 ? asset('storage/'. $user->profile_photo)
                  : null,
-            ]
+            ],200
             );
     }
     public function  updatephoto()
