@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-    
+
  public function register_user(RegisterRequest $request)
     {
         $filePath = null;//profile_photos/default_profile_photo.png
@@ -52,12 +52,12 @@ class AuthController extends Controller
         // $reject=Block::where('',$user->id)->first();
          if($user->block)
          return response()->json(['message'=>'نعتذر ولكن حسابك محظور',401]);
-        
+
          $token = $user->createToken('user_active')->plainTextToken;
           return response()->json([
         'message' => 'تم تسجيل الدخول',
         'token' => $token
-         ], 200); 
+         ], 200);
      }
  public function login_admin(LoginRequest $request)  {
      $admin=Admin::where('name', $request->name)->first();
@@ -69,7 +69,7 @@ class AuthController extends Controller
           return response()->json([
         'message' => 'تم تسجيل الدخول',
         'token' => $token
-         ], 200); 
+         ], 200);
      }
  public function logout(Request  $request){
         $request->user()->currentAccessToken()->delete();
@@ -92,4 +92,5 @@ class AuthController extends Controller
         'message' => 'Incorrect code',
       ], 422);
     }
+    
 }

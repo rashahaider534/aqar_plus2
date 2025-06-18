@@ -1,9 +1,10 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
-    
+
 Route::post('user/register',[AuthController::class,'register_user']);
 //login
 Route::post('/user/login',[AuthController::class,'login_user']);
@@ -14,12 +15,13 @@ Route::post('/Super_Admin/login',[AuthController::class,'login_admin']);
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::post('logout',[AuthController::class,'logout']);
-  Route::post('checkcode',[AuthController::class,'checkcode']);  
+  Route::post('checkcode',[AuthController::class,'checkcode']);
+  Route::get('showprofile',[UserController::class,'showprofile']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
- Route::post('logout',[AuthController::class,'logout']);  
- Route::post('checkcode',[AuthController::class,'checkcode']); 
+ Route::post('logout',[AuthController::class,'logout']);
+ Route::post('checkcode',[AuthController::class,'checkcode']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
