@@ -33,6 +33,7 @@ Route::post('filter/room',[PropertyController::class,'filter_room_user']);
 Route::post('filter/name',[PropertyController::class,'filter_name_user']);
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
+Route::post('booking/buy',[BookingController::class,'completeBooking']);
 Route::post('logout',[AuthController::class,'logout']);
 Route::get('showprofile',[UserController::class,'showprofile']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
@@ -43,6 +44,9 @@ Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
+Route::post('booking',[BookingController::class,'booking']);
+Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
+Route::post('booking/buy',[BookingController::class,'completeBooking']);
 Route::post('filter/area',[PropertyController::class,'filter_area_seller']);
 Route::post('filter/type',[PropertyController::class,'filter_type_seller']);
 Route::post('filter/price',[PropertyController::class,'filter_price_seller']);
