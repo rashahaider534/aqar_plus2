@@ -38,6 +38,7 @@ class PurchaseController extends Controller
         }
 
         $seller = User::find($property->seller_id);
+        $sellername=$seller->name;
         $seller->balance += $purchprice;
         $seller->save();
 
@@ -61,7 +62,7 @@ class PurchaseController extends Controller
             'image_file' => $filePath,
         ]);
 
-        Notification::send($user, new  SendDocument($purchase));
+        Notification::send($user, new  SendDocument($purchase,$sellername));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
     }
 }
