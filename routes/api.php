@@ -3,6 +3,7 @@
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\PurchaseController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -18,9 +19,10 @@ Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function 
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('logout',[AuthController::class,'logout']);
-  Route::post('checkcode',[AuthController::class,'checkcode']);
-  Route::get('showprofile',[UserController::class,'showprofile']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
+Route::get('showprofile',[UserController::class,'showprofile']);
+Route::post('checkcode',[AuthController::class,'checkcode']);
+Route::post('buy/{id}',[PurchaseController::class,'Purchase']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
