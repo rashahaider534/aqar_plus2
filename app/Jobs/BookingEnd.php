@@ -23,8 +23,8 @@ class BookingEnd implements ShouldQueue
 
    public function handle(): void
     {
-     $booking=Booking::where('id',$this->booking_id)->first();
-        if(!$booking->active)
+     $booking=Booking::find($this->booking_id);
+        if(!$booking->active||$booking->status=='Sold')
         return;
     else{
         $user=User::where('id',$this->user_id)->first();
