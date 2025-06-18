@@ -12,7 +12,7 @@ use App\Models\User;
 use App\Mail\Sendbuy;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\SendDocument;
-
+use App\Notifications\Soldtoseller;
 class PurchaseController extends Controller
 {
     public  function Purchase(Request $request)
@@ -63,6 +63,7 @@ class PurchaseController extends Controller
         ]);
 
         Notification::send($user, new  SendDocument($purchase,$sellername));
+        $user->notify(new Soldtoseller($purchase,$purchprice, now()));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
     }
 }
