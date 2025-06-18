@@ -24,6 +24,13 @@ Route::post('filter/area',[PropertyController::class,'filter_area']);
 Route::post('filter/type',[PropertyController::class,'filter_type']);
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
+Route::get('properties',[PropertyController::class,'user_properties']);
+Route::post('filter/area',[PropertyController::class,'filter_area_user']);
+Route::post('filter/type',[PropertyController::class,'filter_type_user']);
+Route::post('filter/price',[PropertyController::class,'filter_price_user']);
+Route::post('filter/province',[PropertyController::class,'filter_province_user']);
+Route::post('filter/room',[PropertyController::class,'filter_room_user']);
+Route::post('filter/name',[PropertyController::class,'filter_name_user']);
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('logout',[AuthController::class,'logout']);
@@ -35,21 +42,28 @@ Route::post('buy/{id}',[PurchaseController::class,'Purchase']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
- Route::post('logout',[AuthController::class,'logout']);
- Route::post('checkcode',[AuthController::class,'checkcode']);
+Route::post('filter/area',[PropertyController::class,'filter_area_seller']);
+Route::post('filter/type',[PropertyController::class,'filter_type_seller']);
+Route::post('filter/price',[PropertyController::class,'filter_price_seller']);
+Route::post('filter/province',[PropertyController::class,'filter_province_seller']);
+Route::post('filter/room',[PropertyController::class,'filter_room_seller']);
+Route::post('filter/name',[PropertyController::class,'filter_name_seller']);
+Route::get('properties',[PropertyController::class,'seller_properties']);
+Route::post('logout',[AuthController::class,'logout']);
+Route::post('checkcode',[AuthController::class,'checkcode']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
-    Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
-  Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
-   Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
+Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
+Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
+Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
-  Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
-  Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
-   Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
+Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
+Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
+Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 
