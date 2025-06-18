@@ -55,6 +55,7 @@ Route::post('buy',[PurchaseController::class,'Purchase']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
+Route::get('wait/properties',[PropertyController::class,'waitProperties']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
 Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);

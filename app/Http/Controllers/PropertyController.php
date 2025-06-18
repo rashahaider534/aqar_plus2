@@ -236,4 +236,9 @@ class PropertyController extends Controller
         }
            return response()->json($properties,200); 
     }
+     public function waitProperties(){
+        $properties= Property::where('status','waiting')->get();
+         return response()->json($properties,200);  
+    }
+
 }
