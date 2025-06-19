@@ -16,9 +16,10 @@ class Property extends Model
     public function images(){
         return $this->hasMany(Image::class);
         }
-     public function favoriteProperties(){
-     return $this->belongsToMany(Property::class,'favorites');
-   }
+        public function favoriteByUsers(){
+        return $this->belongsToMany(User::class,'favorites');
+    }
+    
     public function ratings(){
      return $this->hasMany(Rating::class);
    }

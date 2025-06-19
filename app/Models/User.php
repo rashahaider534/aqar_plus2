@@ -41,9 +41,9 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    public function favoriteByUsers(){
-        return $this->belongsToMany(User::class,'favorites');
-    }
+     public function favoriteProperties(){
+     return $this->belongsToMany(Property::class,'favorites');
+   }
    public function ratings(){
       return $this->hasMany(Rating::class);
    }
@@ -56,12 +56,12 @@ class User extends Authenticatable
        public function bookings(){
       return $this->hasMany(Booking::class);
    }
-    
+
    public function block(){
     return $this->hasOne(Block::class);
    }
      public function properties(){
     return $this->hasMany(Property::class,'seller_id','id');
    }
-             
+
 }
