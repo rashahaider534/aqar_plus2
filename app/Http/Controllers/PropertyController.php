@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\Province;
+use App\Models\Rejected;
 use App\Models\User;
+use App\Notifications\ApprovePropertyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -240,5 +242,37 @@ class PropertyController extends Controller
         $properties= Property::where('status','waiting')->get();
          return response()->json($properties,200);  
     }
+    public function reject_property(Request $request){
+       $user=$request->user();
+        $property=Property::find($request->property_id);
+        $refual_reason=$request->refual_reason;
+        $property->status='rejected';
+        $property->save();
+        Rejected::create([
+          'property_id'=>$property->id,
+          'admin_id'=>$user->id,
+          'description'=>$refual_reason,
+        ]);
+            return response()->json(['message'=>'تم رفض العقار بنجاح'],200); 
+
+    }
+      public function approve_property(Request $request){
+        $property=Property::find($request->property_id);
+        $property->status='available';
+        $property->save();
+        $seller=User::find($property->seller_id);
+        $seller->notify(new ApprovePropertyNotification($property->name));
+            return response()->json(['message'=>'تم الموافقة على العقار بنجاح'],200); 
+    }
+    public function favorite(Request $request){
+        $user=Auth::user();
+       DB:: table('favorites')->insert([
+            'property_id'=>$request->property_id,
+            'user_id'=>$user->id
+        ]);
+            return response()->json(['message'=>'تم الاضافة للمفضلة بنجاح'],200); 
+           
+    }
+
 
 }
