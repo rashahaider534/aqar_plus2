@@ -22,9 +22,11 @@ Route::post('filter/price',[PropertyController::class,'filter_price']);
 Route::post('filter/room',[PropertyController::class,'filter_room']);
 Route::post('filter/area',[PropertyController::class,'filter_area']);
 Route::post('filter/type',[PropertyController::class,'filter_type']);
+Route::post('1',[PropertyController::class,'approve_property']);
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::get('properties',[PropertyController::class,'user_properties']);
+Route::post('addfavorite',[PropertyController::class,'favorite']);
 Route::post('filter/area',[PropertyController::class,'filter_area_user']);
 Route::post('filter/type',[PropertyController::class,'filter_type_user']);
 Route::post('filter/price',[PropertyController::class,'filter_price_user']);
@@ -44,6 +46,7 @@ Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
+Route::post('addfavorite',[PropertyController::class,'favorite']);
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('booking/buy',[BookingController::class,'completeBooking']);
@@ -61,6 +64,9 @@ Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
+Route::post('approve',[PropertyController::class,'approve_property']);
+Route::post('reject',[PropertyController::class,'reject_property']);
+Route::post('/search/users',[UserController::class,'searchUser']);
 Route::get('wait/properties',[PropertyController::class,'waitProperties']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
@@ -69,6 +75,7 @@ Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
+Route::post('/search/users',[UserController::class,'searchUser']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
 Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);

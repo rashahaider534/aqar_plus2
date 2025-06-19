@@ -48,4 +48,15 @@ class UserController extends Controller
 
         return response()->json(['meesage' => 'تم تعديل الصورة بنجاح'], 200);
     }
+    public function searchUser(Request $request){
+        $name=$request->name;
+        $users=User::all();
+        $request_users=array();
+        foreach($users as $user){
+            if(str_contains(strtolower($user->name),strtolower($name)))
+            array_push($request_users,$user);
+        }
+        return response()->json($request_users, 200);
+
+    }
 }
