@@ -10,13 +10,14 @@ use Illuminate\Notifications\Notification;
 class SendDocument extends Notification
 {
     use Queueable;
-     protected $purchase;
+     protected $purchase,$sellername;
     /**
      * Create a new notification instance.
      */
-    public function __construct($purchase)
+    public function __construct($purchase,$sellername)
     {
         $this->purchase = $purchase;
+        $this->sellername=$sellername;
     }
 
     /**
@@ -37,7 +38,7 @@ class SendDocument extends Notification
         return (new MailMessage)
             ->greeting('مرحبًا ' .$this->purchase->full_name)
             ->line('تم نقل ملكية العقار إليك بنجاح.')
-            ->line('من السيد :'.$this->purchase->property->user->name)
+            ->line('من السيد :'.$this->sellername)
             ->line('اسم العقار: ' . $this->purchase->property->name)
             ->line('تاريخ الشراء: ' . $this->purchase->purchase_date->format('Y-m-d'))
             ->line('المبلغ المدفوع: ' . number_format($this->purchase->property->final_price) . ' ل.س')
