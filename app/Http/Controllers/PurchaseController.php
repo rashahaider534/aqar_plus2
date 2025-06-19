@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Purchase;
 use App\Models\Admin;
 use App\Models\User;
+use App\Mail\Sendbuy;
+use Illuminate\Support\Facades\Mail;
+use App\Notifications\SendDocument;
 
 class PurchaseController extends Controller
 {
@@ -47,7 +51,7 @@ class PurchaseController extends Controller
             $fileName = time() . '.' . $file->getClientOriginalExtension();
             $filePath = $file->storeAs('images', $fileName, 'public'); // Saves in storage/app/public/profile_photos
         }
-        Purchase::create([
+        $purchase = Purchase::create([
             'user_id' => $user->id,
             'property_id' => $property->id,
             'full_name' => $request->full_name,
@@ -56,6 +60,8 @@ class PurchaseController extends Controller
             'identity_document' => 'wee',
             'image_file' => $filePath,
         ]);
+
+        Notification::send($user, new  SendDocument($purchase));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
     }
 }
