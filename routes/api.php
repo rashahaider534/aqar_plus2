@@ -51,6 +51,7 @@ Route::post('filter/name',[PropertyController::class,'filter_name_seller']);
 Route::get('properties',[PropertyController::class,'seller_properties']);
 Route::post('logout',[AuthController::class,'logout']);
 Route::post('checkcode',[AuthController::class,'checkcode']);
+Route::post('buy',[PurchaseController::class,'Purchase']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
