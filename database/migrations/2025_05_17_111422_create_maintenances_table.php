@@ -14,10 +14,11 @@ return new class extends Migration
         Schema::create('maintenances', function (Blueprint $table) {
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
-            $table->float('price');
+            $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
+            $table->float('price')->nullable();
+            $table->integer('period')->nullable();
             $table->string('type');
            $table->string('status')->default('waiting');
-            $table->time('requested_at');
             $table->text('description')->nullable();
             $table->timestamps();
         });
