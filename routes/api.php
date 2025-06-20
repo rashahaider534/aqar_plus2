@@ -6,6 +6,7 @@ use App\Http\Controllers\BookingController;
 use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\FavoriteController;
+use App\Http\Controllers\MaintenanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -23,7 +24,6 @@ Route::post('filter/price',[PropertyController::class,'filter_price']);
 Route::post('filter/room',[PropertyController::class,'filter_room']);
 Route::post('filter/area',[PropertyController::class,'filter_area']);
 Route::post('filter/type',[PropertyController::class,'filter_type']);
-Route::post('1',[PropertyController::class,'approve_property']);
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::get('properties',[PropertyController::class,'user_properties']);
@@ -72,6 +72,7 @@ Route::post('deletefavorite',[FavoriteController ::class,'deletefavorite']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
+Route::post('request/maintenance',[MaintenanceController::class,'fixCost']);
 Route::post('approve/seller',[UserController::class,'approveAccountSeller']);
 Route::get('account/sellers',[UserController::class,'pendingSellers']); 
 Route::post('block/seller',[UserController::class,'Block']);   

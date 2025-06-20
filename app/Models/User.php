@@ -63,5 +63,8 @@ class User extends Authenticatable
      public function properties(){
     return $this->hasMany(Property::class,'seller_id','id');
    }
+    public function maintenances(){
+      return $this->hasMany(Maintenance::class);
+   }
 
 }

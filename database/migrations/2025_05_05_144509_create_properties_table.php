@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('seller_id')->constrained('users')->onDelete('cascade');
             $table->string('name');
             $table->string('type');
-            $table->enum('status',['booked ','rejected ','available','Sold'])->default('waiting');
+            $table->enum('status',['booked ','rejected ','available','Sold','waiting'])->default('waiting');
             $table->string('ownership_image');
             $table->integer('room')->nullable();
             $table->integer('price');
