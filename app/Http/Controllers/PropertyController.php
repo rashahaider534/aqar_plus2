@@ -7,6 +7,7 @@ use App\Models\Province;
 use App\Models\Rejected;
 use App\Models\User;
 use App\Notifications\ApprovePropertyNotification;
+use App\Notifications\RejectPropertyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -253,6 +254,8 @@ class PropertyController extends Controller
           'admin_id'=>$user->id,
           'description'=>$refual_reason,
         ]);
+           $seller=User::find($property->seller_id);
+        $seller->notify(new RejectPropertyNotification($property->name));
             return response()->json(['message'=>'تم رفض العقار بنجاح'],200); 
 
     }
