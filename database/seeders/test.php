@@ -15,14 +15,13 @@ class test extends Seeder
      */
     public function run(): void
     {
-       
+
         Admin::create(
             [ // يُستخدم لتجنب تكرار السطر إذا كان موجود
-            
                 'name' => 'Super Admin',
                 'password' => Hash::make('password123'), // غير كلمة السر كما تريد
                 'type' => 'superadmin', // أو 'super_admin' حسب النظام عندك
-            
+
         ]);
     }
 }

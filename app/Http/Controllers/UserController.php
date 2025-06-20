@@ -70,6 +70,10 @@ class UserController extends Controller
         $user->notify(new charge_balance( $balance, now()));
         return response()->json(['meesage'=>'تم شحن رصيد'],200);
     }
+<<<<<<< HEAD
+    
+}
+=======
     public function Block(Request $request){
         $admin=$request->user();
         $seller=User::find($request->seller_id);
@@ -100,3 +104,4 @@ class UserController extends Controller
         return response()->json(['meesage'=>'تم السماح للحساب بنجاح'],200);
     }
 }
+>>>>>>> cbb33d9d95a215f170793dabf183fa16e7812b0d
