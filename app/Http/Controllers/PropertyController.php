@@ -17,40 +17,40 @@ class PropertyController extends Controller
 
     public function properties(){
         $properties= Property::where('status','available')->get();
-         return response()->json($properties,200);  
+         return response()->json($properties,200);
     }
       public function filter_name(Request $request){
         $properties= Property::where('status','available')->where('name',$request->name_property)->get();
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
     public function filter_room(Request $request){
         $properties= Property::where('status','available')->where('room',$request->room_property)->get();
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
-    
+
     public function filter_province(Request $request){
          $province=Province::where('string',$request->province_property)->first();
        $properties=  $province->properties->where('status','available');
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
-    
+
     public function filter_price(Request $request){
         $properties= Property::where('status','available')->where('final_price','>=',$request->start_range)->
         where('final_price','<=',$request->end_range)->get();
-           return response()->json($properties,200); 
-    }
-    
-    public function filter_area(Request $request){
-        $properties= Property::where('status','available')->where('area',$request->area_property)->get();
-           return response()->json($properties,200); 
-    }
-    
-    public function filter_type(Request $request){
-        $properties= Property::where('status','available')->where('type',$request->type_property)->get();
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
-//user 
+    public function filter_area(Request $request){
+        $properties= Property::where('status','available')->where('area',$request->area_property)->get();
+           return response()->json($properties,200);
+    }
+
+    public function filter_type(Request $request){
+        $properties= Property::where('status','available')->where('type',$request->type_property)->get();
+           return response()->json($properties,200);
+    }
+
+//user
 
   public function user_properties(){
         $user=Auth::user();
@@ -61,7 +61,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-        return response()->json($properties,200);  
+        return response()->json($properties,200);
     }
 
      public function filter_name_user(Request $request){
@@ -73,7 +73,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
        public function filter_room_user(Request $request){
@@ -85,7 +85,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
        public function filter_province_user(Request $request){
@@ -98,7 +98,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
      public function filter_price_user(Request $request){
@@ -111,7 +111,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
         public function filter_area_user(Request $request){
@@ -123,7 +123,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
        public function filter_type_user(Request $request){
         $user=Auth::user();
@@ -134,24 +134,24 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
 //admin and suberadmin
          public function filter_status_Admin(Request $request){
         $properties=Property::where('status',$request->status_property)->get();
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
          public function filter_seller_Admin(Request $request){
        $seller=User::where('name',$request->name_seller)->first();
-           return response()->json(  $seller->properties,200); 
+           return response()->json(  $seller->properties,200);
     }
         public function filter_name_Admin(Request $request){
         $properties=Property::where('name',$request->name_property)->get();
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
-    //seller 
+    //seller
 
   public function seller_properties(){
         $user=Auth::user();
@@ -163,7 +163,7 @@ class PropertyController extends Controller
             $properties[$i]['is_favorite']=false;
         }
        // $properties=$properties->where('seller_id','!=',$user->id)->get();
-        return response()->json($properties,200);  
+        return response()->json($properties,200);
     }
 
      public function filter_name_seller(Request $request){
@@ -175,7 +175,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
        public function filter_room_seller(Request $request){
@@ -187,7 +187,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
        public function filter_province_seller(Request $request){
@@ -200,7 +200,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
      public function filter_price_seller(Request $request){
@@ -213,7 +213,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
 
         public function filter_area_seller(Request $request){
@@ -225,7 +225,7 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
        public function filter_type_seller(Request $request){
         $user=Auth::user();
@@ -236,11 +236,11 @@ class PropertyController extends Controller
         else
             $properties[$i]['is_favorite']=false;
         }
-           return response()->json($properties,200); 
+           return response()->json($properties,200);
     }
      public function waitProperties(){
         $properties= Property::where('status','waiting')->get();
-         return response()->json($properties,200);  
+         return response()->json($properties,200);
     }
     public function reject_property(Request $request){
        $user=$request->user();
@@ -253,7 +253,7 @@ class PropertyController extends Controller
           'admin_id'=>$user->id,
           'description'=>$refual_reason,
         ]);
-            return response()->json(['message'=>'تم رفض العقار بنجاح'],200); 
+            return response()->json(['message'=>'تم رفض العقار بنجاح'],200);
 
     }
       public function approve_property(Request $request){
@@ -262,17 +262,9 @@ class PropertyController extends Controller
         $property->save();
         $seller=User::find($property->seller_id);
         $seller->notify(new ApprovePropertyNotification($property->name));
-            return response()->json(['message'=>'تم الموافقة على العقار بنجاح'],200); 
+            return response()->json(['message'=>'تم الموافقة على العقار بنجاح'],200);
     }
-    public function favorite(Request $request){
-        $user=Auth::user();
-       DB:: table('favorites')->insert([
-            'property_id'=>$request->property_id,
-            'user_id'=>$user->id
-        ]);
-            return response()->json(['message'=>'تم الاضافة للمفضلة بنجاح'],200); 
-           
-    }
+    
 
 
 }
