@@ -5,8 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
+use App\Notifications\charge_balance;
 use Illuminate\Support\Facades\Storage;
-
+use Illuminate\Support\Facades\Notification;
 class UserController extends Controller
 {
     public function showprofile()
@@ -58,5 +59,14 @@ class UserController extends Controller
         }
         return response()->json($request_users, 200);
 
+    }
+    public function Charge_balance(Request $request)
+    {
+        $user=Auth::user();
+        $balance=$request->balance;
+        $user->balance += $balance;
+        $user->save();
+        $user->notify(new charge_balance( $balance, now()));
+        return response()->json(['meesage'=>'تم شحن رصيد'],200);
     }
 }
