@@ -72,6 +72,9 @@ Route::post('deletefavorite',[FavoriteController ::class,'deletefavorite']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
+Route::post('approve/seller',[UserController::class,'approveAccountSeller']);
+Route::get('account/sellers',[UserController::class,'pendingSellers']); 
+Route::post('block/seller',[UserController::class,'Block']);   
 Route::post('approve',[PropertyController::class,'approve_property']);
 Route::post('reject',[PropertyController::class,'reject_property']);
 Route::post('/search/users',[UserController::class,'searchUser']);
