@@ -267,6 +267,7 @@ class PropertyController extends Controller
         $seller->notify(new ApprovePropertyNotification($property->name));
             return response()->json(['message'=>'تم الموافقة على العقار بنجاح'],200);
     }
+
     
 
 
