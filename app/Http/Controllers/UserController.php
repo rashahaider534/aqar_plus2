@@ -69,4 +69,5 @@ class UserController extends Controller
         $user->notify(new charge_balance( $balance, now()));
         return response()->json(['meesage'=>'تم شحن رصيد'],200);
     }
+    
 }
