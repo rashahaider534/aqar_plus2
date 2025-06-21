@@ -16,7 +16,6 @@ use Illuminate\Support\Facades\Mail;
 
 class AuthController extends Controller
 {
-
  public function register_user(RegisterRequest $request)
     {
         $filePath = null;//profile_photos/default_profile_photo.png
@@ -29,7 +28,7 @@ class AuthController extends Controller
         $user = User::create([
             'name' => $request->name,
             'password' => Hash::make($request->password),
-            'profile_photo' => $filePath,
+            'profile_photo' => asset('storage/'.$filePath),
             'email'=>$request->email,
             'code'=>$code,
             'balance'=>1000

@@ -8,6 +8,7 @@ use App\Models\Rating;
 use App\Models\Rejected;
 use App\Models\User;
 use App\Notifications\ApprovePropertyNotification;
+use App\Notifications\RejectPropertyNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -277,7 +278,14 @@ class PropertyController extends Controller
             'admin_id' => $user->id,
             'description' => $refual_reason,
         ]);
+<<<<<<< HEAD
         return response()->json(['message' => 'تم رفض العقار بنجاح'], 200);
+=======
+           $seller=User::find($property->seller_id);
+        $seller->notify(new RejectPropertyNotification($property->name));
+            return response()->json(['message'=>'تم رفض العقار بنجاح'],200); 
+
+>>>>>>> cbb33d9d95a215f170793dabf183fa16e7812b0d
     }
     public function approve_property(Request $request)
     {
@@ -288,12 +296,17 @@ class PropertyController extends Controller
         $seller->notify(new ApprovePropertyNotification($property->name));
         return response()->json(['message' => 'تم الموافقة على العقار بنجاح'], 200);
     }
+<<<<<<< HEAD
     public function show_rejecte_property()
     {
         $user = Auth::user();
         $rejecte_properties = Rejected::whereHas('property', function ($query) use ($user) {
             $query->where('seller_id', $user->id);
         })->with('property')->get();
+=======
+
+    
+>>>>>>> cbb33d9d95a215f170793dabf183fa16e7812b0d
 
         return response()->json($rejecte_properties, 200);
     }

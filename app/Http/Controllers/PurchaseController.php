@@ -69,7 +69,7 @@ class PurchaseController extends Controller
     public function show_purchases()
     {
         $user=Auth::user();
-        $purchases=Purchase::where('user_id',$user->id)->get();
-        return response()->json($purchases);
+        $purchases=Purchase::with('property.images')->where('user_id',$user->id)->get();
+        return response()->json(['purchases'=>$purchases],200);
     }
 }

@@ -22,8 +22,8 @@ return new class extends Migration
             $table->string('type')->default('user');
             $table->string('code')->nullable();
             $table->boolean('in_code')->default(0);
-            $table->boolean('consent')->default(0);
-             $table->string('name_admin')->nullable();
+            $table->enum('consent',['requested','waiting','not_requested'])->default('not_requested');
+            $table->string('name_admin')->nullable();
             $table->float('balance')->default(0);
             $table->string('profile_photo')->nullable();
 

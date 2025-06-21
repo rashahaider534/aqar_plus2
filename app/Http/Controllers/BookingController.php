@@ -53,8 +53,8 @@ class BookingController extends Controller
              $booking->update([
                 'status'=>'rejected',
                 'active'=>0
-            ]);     
-            return response()->json(['message'=>'تم الغاء الحجز'],200); 
+            ]);
+            return response()->json(['message'=>'تم الغاء الحجز'],200);
     }
     public function completeBooking(Request $request){
         $user=Auth::user();
@@ -70,7 +70,7 @@ class BookingController extends Controller
             $superAdmin->balance += $superadmin_price;
             $superAdmin->save();
         }
-        
+
         $user->balance -= $property->final_price-($property->final_price*0.2);
         $user->save();
 
@@ -104,5 +104,11 @@ class BookingController extends Controller
         Notification::send($user, new  SendDocument($purchase,$sellername));
         $user->notify(new Soldtoseller($purchase,$property->final_price-($property->final_price*0.03), now()));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
-    } 
+    }
+     public function show_booking()
+    {
+        $user=Auth::user();
+        $booking=Booking::with('property.images')->where('user_id',$user->id)->get();
+        return response()->json(['booking'=>$booking],200);
+    }
 }

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
+use App\Models\Block;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
@@ -20,8 +22,7 @@ class UserController extends Controller
                 'balance' => $user->balance,
                 'phone' => $user->phone,
                 'profile_photo' => $user->profile_photo
-                    ? asset('storage/' . $user->profile_photo)
-                    : null,
+                   
             ],
             200
         );
@@ -44,7 +45,7 @@ class UserController extends Controller
             return response()->json(['message' => 'الملف المرفوع ليس صورة صالحة'], 400);
         }
         $user->update([
-            'profile_photo' => $path
+            'profile_photo' => asset('storage/'.$path)
         ]);
 
         return response()->json(['meesage' => 'تم تعديل الصورة بنجاح'], 200);
@@ -69,5 +70,38 @@ class UserController extends Controller
         $user->notify(new charge_balance( $balance, now()));
         return response()->json(['meesage'=>'تم شحن رصيد'],200);
     }
+<<<<<<< HEAD
     
 }
+=======
+    public function Block(Request $request){
+        $admin=$request->user();
+        $seller=User::find($request->seller_id);
+        $refual_reason=$request->refual_reason;
+          Block::create([
+          'user_id'=>$seller->id,
+          'admin_id'=>$admin->id,
+          'description'=>$refual_reason,
+        ]);
+        $seller->tokens()->delete();
+        return response()->json(['meesage'=>'تم حظر البائع بنجاح'],200);
+    }
+        public function pendingSellers(){
+        $pendingSellers=User::where('consent',waiting)->where('type','seller')->get();
+        return response()->json($pendingSellers,200);
+
+    }
+    public function approveAccountSeller(Request $request){
+         $seller=User::find($request->seller_id);
+         $seller->consent='requested';
+         $seller->type='seller';
+         $seller->save();
+        $superAdmin = Admin::find(1);
+        if ($superAdmin) {
+            $superAdmin->balance += 100;
+            $superAdmin->save();
+        }
+        return response()->json(['meesage'=>'تم السماح للحساب بنجاح'],200);
+    }
+}
+>>>>>>> cbb33d9d95a215f170793dabf183fa16e7812b0d
