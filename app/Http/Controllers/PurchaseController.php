@@ -66,6 +66,7 @@ class PurchaseController extends Controller
         $user->notify(new Soldtoseller($purchase,$purchprice, now()));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
     }
+
     public function show_purchases()
     {
         $user=Auth::user();
@@ -73,3 +74,4 @@ class PurchaseController extends Controller
         return response()->json(['purchases'=>$purchases],200);
     }
 }
+

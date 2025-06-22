@@ -10,6 +10,11 @@ use App\Http\Controllers\MaintenanceController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+
+
+//Route::post('1',[PropertyController::class,'getPropertyStatusReport']);searchAdmin
+
+
 Route::post('user/register',[AuthController::class,'register_user']);
 //login
 Route::post('/user/login',[AuthController::class,'login_user']);
@@ -108,6 +113,9 @@ Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
+Route::post('search/admin',[UserController::class,'searchAdmin']);
+Route::post('/property-status-percentages',[PropertyController::class,'getPropertyStatusReport']);
+Route::post('profits_by_month',[PropertyController::class,'profitsByMonth']);
 Route::post('/search/users',[UserController::class,'searchUser']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);

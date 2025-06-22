@@ -4,7 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\Province;
-use App\Models\Rating;
+
+
+
 use App\Models\Rejected;
 use App\Models\User;
 use App\Notifications\ApprovePropertyNotification;
@@ -287,10 +289,13 @@ class PropertyController extends Controller
 
 
     }
-    public function approve_property(Request $request)
-    {
-        $property = Property::find($request->property_id);
-        $property->status = 'available';
+
+      public function approve_property(Request $request){
+          $admin=$request->user();
+        $property=Property::find($request->property_id);
+        $property->status='available';
+        $property->name_admin=$admin->name;
+
         $property->save();
         $seller = User::find($property->seller_id);
         $seller->notify(new ApprovePropertyNotification($property->name));
