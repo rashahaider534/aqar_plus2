@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\PropertyController as AdminPropertyController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\BookingController;
@@ -111,8 +112,9 @@ Route::get('show_Maintenance_Requests',[MaintenanceController::class,'show_Maint
 Route::post('details_maintenance_requests',[MaintenanceController::class,'details_maintenance_requests']);
 Route::post('logout',[AuthController::class,'logout']);
 });
-//SuperAdmin
+//SuperAdmin 
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
+Route::post('add/admin',[UserController::class,'addAdmin']);    
 Route::post('search/admin',[UserController::class,'searchAdmin']);
 Route::post('/property-status-percentages',[PropertyController::class,'getPropertyStatusReport']);
 Route::post('profits_by_month',[PropertyController::class,'profitsByMonth']);

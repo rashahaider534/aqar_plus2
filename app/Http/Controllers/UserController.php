@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Notifications\charge_balance;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
 class UserController extends Controller
@@ -85,6 +86,7 @@ class UserController extends Controller
     }
         public function pendingSellers(){
         $pendingSellers=User::where('consent','waiting')->where('type','seller')->get();
+        $pendingSellers=User::where('consent','waiting')->where('type','seller')->get();
         return response()->json($pendingSellers,200);
 
     }
@@ -118,7 +120,24 @@ class UserController extends Controller
         return response()->json($request_users, 200);
 
     }
+    public function addAdmin(Request $request){
+        
+        $request->validate([
+            'name' => ['required','unique:admins,name'],
+            'password' => ['required','max:8'],
+        ], [
+            'name.required' => 'يجب ادخال الاسم',
+            'name.unique'  =>'هذا الاسم موجود بالفعل',
 
+        'password.required' => 'يجب ادخال كلمة السر',
+        'password.max'  =>'يجب ان تكون كلمة السر اكبر من ثماني ارقام',
+    ]);
+    Admin::create([
+        'name'=>$request->name,
+        'password'=> Hash::make($request->password), 
+                'type' => 'admin',
+    ]);
+        return response()->json(['meesage'=>'تم اضافة المشرف بنجاح'],200);
 
-
+    }
 }
