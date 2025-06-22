@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Property;
 use App\Models\Rating;
+use App\Models\User;
 
 class PropertyController extends Controller
 {
@@ -43,5 +44,13 @@ class PropertyController extends Controller
         $archivedProperties = Property::onlyTrashed()->with('province')->get();
 
         return response()->json(['archived_properties' => $archivedProperties], 200);
+    }
+    public function show_sellers_accounts()
+    {
+        $sellers_account = User::where('type', 'seller')->get();
+        if ($sellers_account->isEmpty()) {
+            return response()->json(['message' => 'لا يوجد بائعون مسجلون حالياً'], 200);
+        }
+        return response()->json($sellers_account);
     }
 }

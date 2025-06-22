@@ -348,8 +348,9 @@ class PropertyController extends Controller
         if (!$property) {
             return response()->json(['message' => 'العقار غير موجود أو غير متاح للحذف'], 404);
         }
-        $property->forcedelete();
+        $property->delete();
+        session()->flash('delete_at');
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
- 
+
 }
