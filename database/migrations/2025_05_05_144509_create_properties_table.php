@@ -24,6 +24,7 @@ return new class extends Migration
             $table->float('final_price')->nullable();
             $table->float('area');
             $table->text('description')->nullable();
+             $table->softDeletes();
             $table->timestamps();
         });
     }

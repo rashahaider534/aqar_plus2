@@ -97,6 +97,10 @@ Route::get('wait/properties',[PropertyController::class,'waitProperties']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
 Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
+Route::get('properties',[\App\Http\Controllers\Admin\PropertyController::class,'properties']);
+Route::post('property_details',[\App\Http\Controllers\Admin\PropertyController::class,'property_details']);
+Route::post('property_archive',[\App\Http\Controllers\Admin\PropertyController::class,'destroy']);
+Route::get('show_archiveproperties',[\App\Http\Controllers\Admin\PropertyController::class,'show_archived']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin
