@@ -101,6 +101,9 @@ Route::get('properties',[\App\Http\Controllers\Admin\PropertyController::class,'
 Route::post('property_details',[\App\Http\Controllers\Admin\PropertyController::class,'property_details']);
 Route::post('property_archive',[\App\Http\Controllers\Admin\PropertyController::class,'destroy']);
 Route::get('show_archiveproperties',[\App\Http\Controllers\Admin\PropertyController::class,'show_archived']);
+Route::get('show_sellers_accounts',[\App\Http\Controllers\Admin\PropertyController::class,'show_sellers_accounts']);
+Route::get('show_Maintenance_Requests',[MaintenanceController::class,'show_Maintenance_Requests']);
+Route::post('details_maintenance_requests',[MaintenanceController::class,'details_maintenance_requests']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin

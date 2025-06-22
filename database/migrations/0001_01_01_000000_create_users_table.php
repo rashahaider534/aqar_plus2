@@ -18,8 +18,7 @@ return new class extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
             $table->string('bank_code')->unique()->nullable();
-            $table->integer('phone')->nullable();
-            $table->string('type')->default('user');
+            $table->enum('type',['user','seller'])->default('user');
             $table->string('code')->nullable();
             $table->boolean('in_code')->default(0);
             $table->enum('consent',['requested','waiting','not_requested'])->default('not_requested');
