@@ -36,6 +36,10 @@ class MaintenanceController extends Controller
         $user->notify(new SendPriceMaintenanceNotification($price,$period,$property->name,$maintenance->type), now());
             return response()->json(['message'=>'تم ارسال الطلب بنجاح'],200);
 
-        
     }
+    public function show_Maintenance_Requests()
+    {
+        $maintenances=Maintenance::pluck('');
+    }
+
 }

@@ -22,7 +22,7 @@ class UserController extends Controller
                 'balance' => $user->balance,
                 'phone' => $user->phone,
                 'profile_photo' => $user->profile_photo
-                   
+
             ],
             200
         );
@@ -70,6 +70,7 @@ class UserController extends Controller
         $user->notify(new charge_balance( $balance, now()));
         return response()->json(['meesage'=>'تم شحن رصيد'],200);
     }
+
     public function Block(Request $request){
         $admin=$request->user();
         $seller=User::find($request->seller_id);
@@ -83,6 +84,7 @@ class UserController extends Controller
         return response()->json(['meesage'=>'تم حظر البائع بنجاح'],200);
     }
         public function pendingSellers(){
+        $pendingSellers=User::where('consent','waiting')->where('type','seller')->get();
         $pendingSellers=User::where('consent','waiting')->where('type','seller')->get();
         return response()->json($pendingSellers,200);
 

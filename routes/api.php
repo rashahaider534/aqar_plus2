@@ -29,6 +29,9 @@ Route::post('filter/price',[PropertyController::class,'filter_price']);
 Route::post('filter/room',[PropertyController::class,'filter_room']);
 Route::post('filter/area',[PropertyController::class,'filter_area']);
 Route::post('filter/type',[PropertyController::class,'filter_type']);
+Route::post('property_details',[PropertyController::class,'property_details']);
+Route::post('1',[PropertyController::class,'approve_property']);
+
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::get('properties',[PropertyController::class,'user_properties']);
@@ -50,12 +53,17 @@ Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::post('buy',[PurchaseController::class,'Purchase']);
 Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 Route::post('Charge_balance',[UserController::class,'Charge_balance']);
-Route::get('showfavorite',[FavoriteController ::class,'index']);
-Route::post('deletefavorite',[FavoriteController ::class,'deletefavorite']);
+Route::get('showfavorite',[FavoriteController::class,'index']);
+Route::post('deletefavorite',[FavoriteController::class,'deletefavorite']);
+Route::post('property_details',[PropertyController::class,'property_details']);
+Route::get('show_purchases',[PurchaseController::class,'show_purchases']);
+Route::get('show_booking',[BookingController::class,'show_booking']);
+Route::get('show_rental',[BookingController::class,'show_rental']);
+
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
-Route::post('addfavorite',[FavoriteController ::class,'favorite']);
+Route::post('addfavorite',[FavoriteController::class,'favorite']);
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
 Route::post('booking/buy',[BookingController::class,'completeBooking']);
@@ -71,16 +79,22 @@ Route::post('checkcode',[AuthController::class,'checkcode']);
 Route::post('buy',[PurchaseController::class,'Purchase']);
 Route::post('update/profilephoto',[UserController::class,'updatephoto']);
 Route::post('Charge_balance',[UserController::class,'Charge_balance']);
-Route::get('showfavorite',[FavoriteController ::class,'index']);
+Route::get('showfavorite',[FavoriteController::class,'index']);
 Route::post('deletefavorite',[FavoriteController ::class,'deletefavorite']);
-
+Route::get('show_rejecte_property',[PropertyController::class,'show_rejecte_property']);
+Route::get('show_approve_property',[PropertyController::class,'show_approve_property']);
+Route::post('deleteproperty',[PropertyController::class,'destroy']);
+Route::post('property_details',[PropertyController::class,'property_details']);
+Route::get('show_purchases',[PurchaseController::class,'show_purchases']);
+Route::get('show_booking',[BookingController::class,'show_booking']);
+Route::get('show_rental',[BookingController::class,'show_rental']);
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
 Route::post('request/maintenance',[MaintenanceController::class,'fixCost']);
 Route::post('approve/seller',[UserController::class,'approveAccountSeller']);
-Route::get('account/sellers',[UserController::class,'pendingSellers']); 
-Route::post('block/seller',[UserController::class,'Block']);   
+Route::get('account/sellers',[UserController::class,'pendingSellers']);
+Route::post('block/seller',[UserController::class,'Block']);
 Route::post('approve',[PropertyController::class,'approve_property']);
 Route::post('reject',[PropertyController::class,'reject_property']);
 Route::post('/search/users',[UserController::class,'searchUser']);
@@ -88,6 +102,10 @@ Route::get('wait/properties',[PropertyController::class,'waitProperties']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
 Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
+Route::get('properties',[\App\Http\Controllers\Admin\PropertyController::class,'properties']);
+Route::post('property_details',[\App\Http\Controllers\Admin\PropertyController::class,'property_details']);
+Route::post('property_archive',[\App\Http\Controllers\Admin\PropertyController::class,'destroy']);
+Route::get('show_archiveproperties',[\App\Http\Controllers\Admin\PropertyController::class,'show_archived']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 //SuperAdmin
