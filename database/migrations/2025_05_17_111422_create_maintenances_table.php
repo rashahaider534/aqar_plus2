@@ -18,7 +18,7 @@ return new class extends Migration
             $table->float('price')->nullable();
             $table->integer('period')->nullable();
             $table->string('type');
-           $table->string('status')->default('waiting');
+           $table->enum('status',['approved','rejected','responded','waiting'])->default('waiting');
             $table->text('description')->nullable();
             $table->timestamps();
         });

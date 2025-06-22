@@ -83,14 +83,20 @@ class UserController extends Controller
         return response()->json(['meesage'=>'تم حظر البائع بنجاح'],200);
     }
         public function pendingSellers(){
-        $pendingSellers=User::where('consent',waiting)->where('type','seller')->get();
+        $pendingSellers=User::where('consent','waiting')->where('type','seller')->get();
         return response()->json($pendingSellers,200);
 
     }
     public function approveAccountSeller(Request $request){
+        $admin=$request->user();
+          $superAdmin = Admin::find(1);
+        if ($superAdmin) {
+            $superAdmin->balance += 100;
+            $superAdmin->save();
          $seller=User::find($request->seller_id);
          $seller->consent='requested';
          $seller->type='seller';
+         $seller->name_admin=$admin->name;
          $seller->save();
         $superAdmin = Admin::find(1);
         if ($superAdmin) {
@@ -98,5 +104,17 @@ class UserController extends Controller
             $superAdmin->save();
         }
         return response()->json(['meesage'=>'تم السماح للحساب بنجاح'],200);
+    } 
+}
+     public function searchAdmin(Request $request){
+        $name=$request->name;
+        $users=Admin::all();
+        $request_users=array();
+        foreach($users as $user){
+            if(str_contains(strtolower($user->name),strtolower($name)))
+            array_push($request_users,$user);
+        }
+        return response()->json($request_users, 200);
+
     }
 }

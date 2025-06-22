@@ -29,6 +29,7 @@ class MaintenanceController extends Controller
         $maintenance=Maintenance::find($request->maintenance_id);
         $maintenance->price=$price;
         $maintenance->period=$period;
+        $maintenance->status='responded';
         $maintenance->save();
         $property=Property::find($maintenance->property_id);
         $user= User::find($maintenance->user_id);

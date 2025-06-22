@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Property;
 use App\Models\Province;
+use App\Models\Purchase;
 use App\Models\Rejected;
 use App\Models\User;
 use App\Notifications\ApprovePropertyNotification;
@@ -260,15 +261,65 @@ class PropertyController extends Controller
 
     }
       public function approve_property(Request $request){
+          $admin=$request->user();
         $property=Property::find($request->property_id);
         $property->status='available';
+        $property->name_admin=$admin->name;
         $property->save();
         $seller=User::find($property->seller_id);
         $seller->notify(new ApprovePropertyNotification($property->name));
             return response()->json(['message'=>'تم الموافقة على العقار بنجاح'],200);
     }
 
-    
+    public function getPropertyStatusReport(Request $request){
+    $count_property=Property::whereNotIn('status',['rejected','waiting'])->count();
+    if($count_property==0)
+        return response()->json([
+        'count_property' => 0,
+        'sold' => 0,
+        'booked' => 0,
+        'rejected' => 0,
+    ],200);
+    $count_sold=Property::where('status','Sold')->count();
+    $ans_sold=($count_sold*100)/$count_property;
+    $count_booked=Property::where('status','booked')->count();
+    $ans_booked=($count_booked*100)/$count_property;
+    $count_rejected=Property::where('status','rejected')->count();
+    $ans_rejected=($count_rejected*100)/$count_property;
+     return response()->json([
+        'count_property' => $count_property,
+        'sold' => $ans_sold,
+        'booked' => $ans_booked,
+        'rejected' => $ans_rejected,
+    ],200);
+}
+     
+public function profitsByMonth(Request $request)
+{
+    $request->validate([
+        'year' => 'required|integer|min:2000|max:' . now()->year,
+    ]);
+    $year = $request->year;
+    $purchases = Purchase::with('property')
+        ->whereYear('created_at', $year)
+        ->get();
+    $monthlyProfits = [];
+    for ($i = 1; $i <= 12; $i++) {
+        $month = str_pad($i, 2, '0', STR_PAD_LEFT);
+        $monthlyProfits[$month] = 0;
+    }
+
+    foreach ($purchases as $purchase) {
+        $month = $purchase->created_at->format('m');
+        $finalPrice = $purchase->property->final_price ?? 0;
+        $monthlyProfits[$month] += $finalPrice * 0.03;
+    }
+
+    return response()->json([
+        'year' => $year,
+        'profits' => $monthlyProfits,
+    ],200);
+}
 
 
 }

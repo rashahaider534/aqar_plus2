@@ -20,6 +20,7 @@ return new class extends Migration
             $table->enum('status',['booked ','rejected ','available','Sold','waiting'])->default('waiting');
             $table->string('ownership_image');
             $table->integer('room')->nullable();
+            $table->string('name_admin')->nullable();
             $table->integer('price');
             $table->float('final_price')->nullable();
             $table->float('area');
