@@ -3,9 +3,11 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Property extends Model
 {
+    use SoftDeletes;
     protected $guarded = [];
     public function province(){
         return $this->belongsTo(Province::class);
@@ -19,7 +21,7 @@ class Property extends Model
         public function favoriteByUsers(){
         return $this->belongsToMany(User::class,'favorites');
     }
-    
+
     public function ratings(){
      return $this->hasMany(Rating::class);
    }
