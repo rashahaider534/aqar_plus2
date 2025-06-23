@@ -137,16 +137,7 @@ Route::get('show_admins_accounts',[\App\Http\Controllers\Admin\AdminController::
 Route::get('count_admins_accounts',[\App\Http\Controllers\Admin\AdminController::class,'count_admins_accounts']);
 Route::post('destroy_admin',[\App\Http\Controllers\Admin\AdminController::class,'destroy_admin']);
 Route::post('logout',[AuthController::class,'logout']);
-<<<<<<< HEAD
-});
 
-
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware(['auth:sanctum', 'CheckAdmin']);
-=======
-=======
 Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(function () {
     Route::post('request/maintenance', [MaintenanceController::class, 'fixCost']);
     Route::post('approve/seller', [UserController::class, 'approveAccountSeller']);
@@ -181,5 +172,4 @@ Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->gr
     Route::post('filter/status', [PropertyController::class, 'filter_status_Admin']);
     Route::post('logout', [AuthController::class, 'logout']);
 });
-
->>>>>>> ac60af026954269fc481407c7094d074d77c78c8
+}
