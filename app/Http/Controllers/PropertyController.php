@@ -14,6 +14,7 @@ use App\Models\User;
 use App\Notifications\AddPropertyNotification;
 use App\Notifications\ApprovePropertyNotification;
 use App\Notifications\RejectPropertyNotification;
+use App\Notifications\PropertyPriceUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -363,7 +364,6 @@ class PropertyController extends Controller
             return response()->json(['message' => 'العقار غير موجود أو غير متاح للحذف'], 404);
         }
         $property->delete();
-        session()->flash('delete_at');
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
 
@@ -447,6 +447,25 @@ class PropertyController extends Controller
         $sellers = User::where('name_admin', $admin->name)->get();
         return response()->json($sellers, 200);
     }
+<<<<<<< HEAD
+    public function update_price(Request $request)
+    {
+        $user = Auth::user();
+        $property = Property::where('id', $request->property_id)
+            ->where('seller_id', $user->id)
+            ->first();
+        if (!$property) {
+            return response()->json(['message' => 'العقار غير موجود أو لا تملكه'], 404);
+        }
+        $property->update([
+            'final_price' => $request->price
+        ]);
+        $favoriteUsers = $property->favoriteByUsers()->get();
+        foreach ($favoriteUsers as $favUser) {
+            $favUser->notify(new PropertyPriceUpdated($property));
+        }
+        return response()->json(['meesage' => '  تم تعديل السعر و ارسال اشعار للمهتمين'], 200);
+=======
     public function addProperty(AddPropertyRequest $request)
     {
         $seller = Auth::user();
@@ -482,5 +501,6 @@ class PropertyController extends Controller
             $admin->notify(new AddPropertyNotification($seller->name));
         }
         return response()->json(['meesage' => 'تم اضافة العقار بنجاح'], 200);
+>>>>>>> 3afe158ffc9757b0f1110e2ff36ff86d06d4b1f7
     }
 }

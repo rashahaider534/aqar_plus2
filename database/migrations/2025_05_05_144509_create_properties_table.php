@@ -21,7 +21,6 @@ return new class extends Migration
             $table->string('ownership_image');
             $table->integer('room')->nullable();
             $table->string('name_admin')->nullable();
-            $table->integer('price');
             $table->float('final_price')->nullable();
             $table->float('area');
             $table->text('description')->nullable();
