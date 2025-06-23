@@ -26,7 +26,7 @@ class PurchaseController extends Controller
             return response()->json(['message' => 'ليس لديك رصيد كافي يرجى شحن حسابك', 400]);
         }
         if ($property->status == 'Sold') {
-            return response()->json(['message' => 'العقار تم بيعه ', 400]);
+            return response()->json(['message' => 'العقار تم بيعه ', 200]);
         }
         $user->balance -= $price;
         $user->save();

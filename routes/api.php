@@ -36,7 +36,7 @@ Route::post('1',[PropertyController::class,'approve_property']);
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
 Route::get('properties',[PropertyController::class,'user_properties']);
-Route::post('addfavorite',[FavoriteController ::class,'favorite']);
+Route::post('addfavorite',[FavoriteController::class,'favorite']);
 Route::post('filter/area',[PropertyController::class,'filter_area_user']);
 Route::post('filter/type',[PropertyController::class,'filter_type_user']);
 Route::post('filter/price',[PropertyController::class,'filter_price_user']);
@@ -107,14 +107,13 @@ Route::get('properties',[\App\Http\Controllers\Admin\PropertyController::class,'
 Route::post('property_details',[\App\Http\Controllers\Admin\PropertyController::class,'property_details']);
 Route::post('property_archive',[\App\Http\Controllers\Admin\PropertyController::class,'destroy']);
 Route::get('show_archiveproperties',[\App\Http\Controllers\Admin\PropertyController::class,'show_archived']);
-Route::get('show_sellers_accounts',[\App\Http\Controllers\Admin\PropertyController::class,'show_sellers_accounts']);
 Route::get('show_Maintenance_Requests',[MaintenanceController::class,'show_Maintenance_Requests']);
 Route::post('details_maintenance_requests',[MaintenanceController::class,'details_maintenance_requests']);
 Route::post('logout',[AuthController::class,'logout']);
 });
-//SuperAdmin 
+//SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
-Route::post('add/admin',[UserController::class,'addAdmin']);    
+Route::post('add/admin',[UserController::class,'addAdmin']);
 Route::post('search/admin',[UserController::class,'searchAdmin']);
 Route::post('/property-status-percentages',[PropertyController::class,'getPropertyStatusReport']);
 Route::post('profits_by_month',[PropertyController::class,'profitsByMonth']);
@@ -122,6 +121,12 @@ Route::post('/search/users',[UserController::class,'searchUser']);
 Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
 Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
 Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
+Route::get('show_users_accounts',[UserController::class,'show_users_accounts']);
+Route::get('count_users_accounts',[UserController::class,'count_users_accounts']);
+Route::get('show_sellers_accounts',[UserController::class,'show_sellers_accounts']);
+Route::get('count_sellers_accounts',[UserController::class,'count_sellers_accounts']);
+Route::get('show_admins_accounts',[\App\Http\Controllers\Admin\AdminController::class,'show_admins_accounts']);
+Route::get('count_admins_accounts',[\App\Http\Controllers\Admin\AdminController::class,'count_admins_accounts']);
 Route::post('logout',[AuthController::class,'logout']);
 });
 

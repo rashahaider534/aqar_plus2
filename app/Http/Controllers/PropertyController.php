@@ -353,7 +353,8 @@ class PropertyController extends Controller
         session()->flash('delete_at');
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
-      public function getPropertyStatusReport(Request $request){
+    
+    public function getPropertyStatusReport(Request $request){
     $count_property=Property::where('status','rejected')->where('status','waiting')->count();
     if($count_property==0)
         return response()->json([
@@ -375,7 +376,7 @@ class PropertyController extends Controller
         'rejected' => $ans_rejected,
     ],200);
 }
-     
+
 public function profitsByMonth(Request $request)
 {
     $request->validate([
