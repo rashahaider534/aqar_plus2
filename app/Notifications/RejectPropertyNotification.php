@@ -11,10 +11,10 @@ class RejectPropertyNotification extends Notification
 {
     use Queueable;
 
- public $proprty_name;
+    public $proprty_name;
     public function __construct($proprty_name)
     {
-        $this->proprty_name=$proprty_name;
+        $this->proprty_name = $proprty_name;
     }
 
     /**
@@ -30,8 +30,8 @@ class RejectPropertyNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message'=>'تم رفض عقار' . $this->proprty_name . 'الخاص بك',
-            'time'=>now()
+            'message' => 'تم رفض عقار' . $this->proprty_name . 'الخاص بك',
+            'time' => now()
         ];
     }
 }

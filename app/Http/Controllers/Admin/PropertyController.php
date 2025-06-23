@@ -53,5 +53,4 @@ class PropertyController extends Controller
         }
         return response()->json($sellers_account);
     }
-  
 }

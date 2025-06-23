@@ -6,11 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Rental extends Model
 {
-   protected $guarded=['id'];
-    public function property(){
+    protected $guarded = ['id'];
+    public function property()
+    {
         return $this->belongsTo(Property::class);
     }
-    public function user(){
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
 }

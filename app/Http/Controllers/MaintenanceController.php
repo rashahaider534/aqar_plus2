@@ -22,16 +22,16 @@ class MaintenanceController extends Controller
             'price.gt'       => 'يجب أن يكون السعر أكبر من صفر.',
 
 
-        'period.required' => 'يجب إدخال المدة.',
-        'period.numeric'  => 'يجب أن يكون المدة رقمًا.',
-        'period.gt'       => 'يجب أن يكون المدة أكبر من صفر.',
-    ]);
-        $price=$request->price;
-        $period=$request->period;
-        $maintenance=Maintenance::find($request->maintenance_id);
-        $maintenance->price=$price;
-        $maintenance->period=$period;
-        $maintenance->status='responded';
+            'period.required' => 'يجب إدخال المدة.',
+            'period.numeric'  => 'يجب أن يكون المدة رقمًا.',
+            'period.gt'       => 'يجب أن يكون المدة أكبر من صفر.',
+        ]);
+        $price = $request->price;
+        $period = $request->period;
+        $maintenance = Maintenance::find($request->maintenance_id);
+        $maintenance->price = $price;
+        $maintenance->period = $period;
+        $maintenance->status = 'responded';
 
         $maintenance->save();
         $property = Property::find($maintenance->property_id);
@@ -48,7 +48,7 @@ class MaintenanceController extends Controller
         }
         return  response()->json($maintenances, 200);
     }
-    
+
     public function details_maintenance_requests(Request $request)
     {
         $maintenance = Maintenance::with('property:id,name')
