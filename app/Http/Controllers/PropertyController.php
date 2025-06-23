@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Property;
 use App\Models\Province;
 use App\Models\Purchase;
@@ -463,5 +464,11 @@ public function profitsByMonth(Request $request)
         $seller = Auth::user();
         $properties = $seller->properties->where('status', 'waiting');
         return response()->json($properties, 200);
+    }
+    public function approvedSellerAdmin(Request $request)
+    {
+        $admin = Admin::find($request->admin_id);
+        $sellers = User::where('name_admin', $admin->name)->get();
+        return response()->json($sellers, 200);
     }
 }

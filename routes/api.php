@@ -186,6 +186,7 @@ Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(functi
 });
 //SuperAdmin 
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->group(function () {
+    Route::post('approved/sellers/admin', [PropertyController::class, 'approvedSellerAdmin']);
     Route::post('add/admin', [UserController::class, 'addAdmin']);
     Route::post('search/admin', [UserController::class, 'searchAdmin']);
     Route::post('/property-status-percentages', [PropertyController::class, 'getPropertyStatusReport']);
@@ -198,21 +199,3 @@ Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->gr
 >>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
 });
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-Route::post('logout', [AuthController::class, 'logout'])->middleware('auth:sanctum');
-
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware(['auth:sanctum', 'CheckAdmin']);
