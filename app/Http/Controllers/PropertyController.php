@@ -2,13 +2,16 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddPropertyRequest;
 use App\Models\Admin;
+use App\Models\Image;
 use App\Models\Property;
 use App\Models\Province;
 use App\Models\Purchase;
 use App\Models\Rating;
 use App\Models\Rejected;
 use App\Models\User;
+use App\Notifications\AddPropertyNotification;
 use App\Notifications\ApprovePropertyNotification;
 use App\Notifications\RejectPropertyNotification;
 use Illuminate\Http\Request;
@@ -17,6 +20,16 @@ use Illuminate\Support\Facades\DB;
 
 class PropertyController extends Controller
 {
+    public function addRating(Request $request)
+    {
+        $user=Auth::user();
+        Rating::create([
+            'property_id' => $request->property_id,
+            'user_id' => $user->id,
+            'rating' => $request->rating
+        ]);
+        return response()->json(['message' => 'تم اضافة التقيم بنجاح'], 200);
+    }
     //no token
 
     public function properties()
@@ -289,7 +302,9 @@ class PropertyController extends Controller
     }
     public function approve_property(Request $request)
     {
+        $admin = Auth::user();
         $property = Property::find($request->property_id);
+        $property->name_admin = $admin->name;
         $property->status = 'available';
         $property->save();
         $seller = User::find($property->seller_id);
@@ -352,7 +367,6 @@ class PropertyController extends Controller
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
 
-
     public function getPropertyStatusReport(Request $request)
     {
         $count_property = Property::where('status', 'rejected')->where('status', 'waiting')->count();
@@ -375,7 +389,6 @@ class PropertyController extends Controller
             'booked' => $ans_booked,
             'rejected' => $ans_rejected,
         ], 200);
-
     }
 
     public function profitsByMonth(Request $request)
@@ -433,5 +446,41 @@ class PropertyController extends Controller
         $admin = Admin::find($request->admin_id);
         $sellers = User::where('name_admin', $admin->name)->get();
         return response()->json($sellers, 200);
+    }
+    public function addProperty(AddPropertyRequest $request)
+    {
+        $seller = Auth::user();
+        if ($request->hasFile('ownership_image')) {
+            $file = $request->file('ownership_image');
+            $fileName = time() . '.' . $file->getClientOriginalExtension();
+            $filePath = $file->storeAs('ownership_doc', $fileName, 'public'); // Saves in storage/app/public/ownership_doc
+        }
+        $province = Province::where('string', $request->province)->first();
+        $property = Property::create([
+            'seller_id' => $seller->id,
+            'province_id' => $province->id,
+            'name' => $request->name,
+            'type' => $request->type,
+            'ownership_image' => asset('storage/' . $filePath),
+            'room' => $request->room,
+            'final_price' => $request->final_price,
+            'price' => $request->final_price,
+            'area' => $request->area,
+            'description' => $request->description,
+        ]);
+        foreach ($request->file('images') as $img) {
+            $path = $img->store('property_images', 'public');
+
+            $image = Image::create([
+                'property_id' => $property->id,
+                'image_path' => asset('storage/' . $path),
+            ]);
+        }
+        $property = Property::with('images')->find($property->id);
+        $admins = Admin::where('type', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new AddPropertyNotification($seller->name));
+        }
+        return response()->json(['meesage' => 'تم اضافة العقار بنجاح'], 200);
     }
 }
