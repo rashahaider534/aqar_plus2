@@ -31,7 +31,7 @@ Route::post('filter/room',[PropertyController::class,'filter_room']);
 Route::post('filter/area',[PropertyController::class,'filter_area']);
 Route::post('filter/type',[PropertyController::class,'filter_type']);
 Route::post('property_details',[PropertyController::class,'property_details']);
-Route::post('1',[PropertyController::class,'approve_property']);
+//Route::post('1',[PropertyController::class,'approve_property']);
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
@@ -64,6 +64,10 @@ Route::get('show_rental',[BookingController::class,'show_rental']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum','CheckSeller'])->group(function () {
+Route::get('waiting',[PropertyController::class,'sellerWaiting']); 
+Route::get('rented',[PropertyController::class,'sellerRented']); 
+Route::get('booked',[PropertyController::class,'sellerBooked']); 
+Route::get('solded',[PropertyController::class,'sellerSolded']);   
 Route::post('addfavorite',[FavoriteController::class,'favorite']);
 Route::post('booking',[BookingController::class,'booking']);
 Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
