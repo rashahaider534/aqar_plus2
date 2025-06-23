@@ -8,14 +8,15 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\ProvincesController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
 
-//Route::post('1',[PropertyController::class,'getPropertyStatusReport']);searchAdmin
+//Route::post('1',[PropertyController::class,'getPropertyStatusReport']);searchAdmin addProperty
 
-
+//Route::post('1', [PropertyC::class, 'addProperty']);
 Route::post('user/register', [AuthController::class, 'register_user']);
 //login
 Route::post('/user/login', [AuthController::class, 'login_user']);
@@ -34,35 +35,6 @@ Route::post('property_details', [PropertyController::class, 'property_details'])
 //Route::post('1',[PropertyController::class,'approve_property']);
 
 //user
-<<<<<<< HEAD
-Route::prefix('user')->middleware(['auth:sanctum','CheckUser'])->group(function () {
-Route::get('properties',[PropertyController::class,'user_properties']);
-Route::post('addfavorite',[FavoriteController::class,'favorite']);
-Route::post('filter/area',[PropertyController::class,'filter_area_user']);
-Route::post('filter/type',[PropertyController::class,'filter_type_user']);
-Route::post('filter/price',[PropertyController::class,'filter_price_user']);
-Route::post('filter/province',[PropertyController::class,'filter_province_user']);
-Route::post('filter/room',[PropertyController::class,'filter_room_user']);
-Route::post('filter/name',[PropertyController::class,'filter_name_user']);
-Route::post('booking',[BookingController::class,'booking']);
-Route::post('booking/cancel',[BookingController::class,'cancelBooking']);
-Route::post('booking/buy',[BookingController::class,'completeBooking']);
-Route::post('logout',[AuthController::class,'logout']);
-Route::get('showprofile',[UserController::class,'showprofile']);
-Route::post('checkcode',[AuthController::class,'checkcode']);
-Route::get('showprofile',[UserController::class,'showprofile']);
-Route::post('checkcode',[AuthController::class,'checkcode']);
-Route::post('buy',[PurchaseController::class,'Purchase']);
-Route::post('update/profilephoto',[UserController::class,'updatephoto']);
-Route::post('Charge_balance',[UserController::class,'Charge_balance']);
-Route::get('showfavorite',[FavoriteController::class,'index']);
-Route::post('deletefavorite',[FavoriteController::class,'deletefavorite']);
-Route::post('property_details',[PropertyController::class,'property_details']);
-Route::get('show_purchases',[PurchaseController::class,'show_purchases']);
-Route::get('show_booking',[BookingController::class,'show_booking']);
-Route::get('show_rental',[BookingController::class,'show_rental']);
-
-=======
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
     Route::get('properties', [PropertyController::class, 'user_properties']);
     Route::post('addfavorite', [FavoriteController::class, 'favorite']);
@@ -89,10 +61,10 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
     Route::get('show_purchases', [PurchaseController::class, 'show_purchases']);
     Route::get('show_booking', [BookingController::class, 'show_booking']);
     Route::get('show_rental', [BookingController::class, 'show_rental']);
->>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
+    Route::post('add/property', [PropertyController::class, 'addProperty']);
     Route::get('waiting', [PropertyController::class, 'sellerWaiting']);
     Route::get('rented', [PropertyController::class, 'sellerRented']);
     Route::get('booked', [PropertyController::class, 'sellerBooked']);
@@ -124,45 +96,7 @@ Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(func
     Route::get('show_rental', [BookingController::class, 'show_rental']);
 });
 //Admin
-<<<<<<< HEAD
-Route::prefix('Admin')->middleware(['auth:sanctum','CheckAdmin'])->group(function () {
-Route::post('request/maintenance',[MaintenanceController::class,'fixCost']);
-Route::post('approve/seller',[UserController::class,'approveAccountSeller']);
-Route::get('account/sellers',[UserController::class,'pendingSellers']);
-Route::post('block/seller',[UserController::class,'Block']);
-Route::post('approve',[PropertyController::class,'approve_property']);
-Route::post('reject',[PropertyController::class,'reject_property']);
-Route::post('/search/users',[UserController::class,'searchUser']);
-Route::get('wait/properties',[PropertyController::class,'waitProperties']);
-Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
-Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
-Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
-Route::get('properties',[\App\Http\Controllers\Admin\PropertyController::class,'properties']);
-Route::post('property_details',[\App\Http\Controllers\Admin\PropertyController::class,'property_details']);
-Route::post('property_archive',[\App\Http\Controllers\Admin\PropertyController::class,'destroy']);
-Route::get('show_archiveproperties',[\App\Http\Controllers\Admin\PropertyController::class,'show_archived']);
-Route::get('show_Maintenance_Requests',[MaintenanceController::class,'show_Maintenance_Requests']);
-Route::post('details_maintenance_requests',[MaintenanceController::class,'details_maintenance_requests']);
-Route::post('logout',[AuthController::class,'logout']);
-});
-//SuperAdmin
-Route::prefix('SuperAdmin')->middleware(['auth:sanctum','CheckSuperAdmin'])->group(function () {
-Route::post('add/admin',[UserController::class,'addAdmin']);
-Route::post('search/admin',[UserController::class,'searchAdmin']);
-Route::post('/property-status-percentages',[PropertyController::class,'getPropertyStatusReport']);
-Route::post('profits_by_month',[PropertyController::class,'profitsByMonth']);
-Route::post('/search/users',[UserController::class,'searchUser']);
-Route::post('filter/seller',[PropertyController::class,'filter_seller_Admin']);
-Route::post('filter/name',[PropertyController::class,'filter_name_Admin']);
-Route::post('filter/status',[PropertyController::class,'filter_status_Admin']);
-Route::get('show_users_accounts',[UserController::class,'show_users_accounts']);
-Route::get('count_users_accounts',[UserController::class,'count_users_accounts']);
-Route::get('show_sellers_accounts',[UserController::class,'show_sellers_accounts']);
-Route::get('count_sellers_accounts',[UserController::class,'count_sellers_accounts']);
-Route::get('show_admins_accounts',[\App\Http\Controllers\Admin\AdminController::class,'show_admins_accounts']);
-Route::get('count_admins_accounts',[\App\Http\Controllers\Admin\AdminController::class,'count_admins_accounts']);
-Route::post('logout',[AuthController::class,'logout']);
-=======
+
 Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(function () {
     Route::post('request/maintenance', [MaintenanceController::class, 'fixCost']);
     Route::post('approve/seller', [UserController::class, 'approveAccountSeller']);
@@ -196,6 +130,4 @@ Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->gr
     Route::post('filter/name', [PropertyController::class, 'filter_name_Admin']);
     Route::post('filter/status', [PropertyController::class, 'filter_status_Admin']);
     Route::post('logout', [AuthController::class, 'logout']);
->>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
 });
-
