@@ -18,7 +18,7 @@ class AuthController extends Controller
 {
   public function register_user(RegisterRequest $request)
   {
-    $filePath = null; //profile_photos/default_profile_photo.png
+    $filePath = 'profile_photos/default_profile_photo.png';
     if ($request->hasFile('profile_photo')) {
       $file = $request->file('profile_photo');
       $fileName = time() . '.' . $file->getClientOriginalExtension();
