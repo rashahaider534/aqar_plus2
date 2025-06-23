@@ -377,6 +377,7 @@ class PropertyController extends Controller
             'booked' => $ans_booked,
             'rejected' => $ans_rejected,
         ], 200);
+
     }
 
     public function profitsByMonth(Request $request)

@@ -170,5 +170,6 @@ class UserController extends Controller
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
 
+
     }
 }
