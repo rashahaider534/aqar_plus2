@@ -111,38 +111,7 @@ class UserController extends Controller
             return response()->json(['meesage' => 'تم السماح للحساب بنجاح'], 200);
         }
     }
-    public function searchAdmin(Request $request)
-    {
-        $name = $request->name;
-        $users = Admin::all();
-        $request_users = array();
-        foreach ($users as $user) {
-            if (str_contains(strtolower($user->name), strtolower($name)))
-                array_push($request_users, $user);
-        }
-        return response()->json($request_users, 200);
-    }
-    public function addAdmin(Request $request)
-    {
 
-        $request->validate([
-            'name' => ['required', 'unique:admins,name'],
-            'password' => ['required', 'max:8'],
-        ], [
-            'name.required' => 'يجب ادخال الاسم',
-            'name.unique'  => 'هذا الاسم موجود بالفعل',
-
-            'password.required' => 'يجب ادخال كلمة السر',
-            'password.max'  => 'يجب ان تكون كلمة السر اكبر من ثماني ارقام',
-        ]);
-        Admin::create([
-            'name' => $request->name,
-            'password' => Hash::make($request->password),
-            'type' => 'admin',
-        ]);
-        return response()->json(['meesage' => 'تم اضافة المشرف بنجاح'], 200);
-<<<<<<< HEAD
-    }
     public function show_users_accounts()
     {
         $users = User::where('type', 'user')->get();
@@ -169,7 +138,6 @@ class UserController extends Controller
     {
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
-=======
->>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
+
     }
 }
