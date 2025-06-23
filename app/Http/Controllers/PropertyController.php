@@ -20,6 +20,16 @@ use Illuminate\Support\Facades\DB;
 
 class PropertyController extends Controller
 {
+    public function addRating(Request $request)
+    {
+        $user=Auth::user();
+        Rating::create([
+            'property_id' => $request->property_id,
+            'user_id' => $user->id,
+            'rating' => $request->rating
+        ]);
+        return response()->json(['message' => 'تم اضافة التقيم بنجاح'], 200);
+    }
     //no token
 
     public function properties()
@@ -292,7 +302,9 @@ class PropertyController extends Controller
     }
     public function approve_property(Request $request)
     {
+        $admin = Auth::user();
         $property = Property::find($request->property_id);
+        $property->name_admin = $admin->name;
         $property->status = 'available';
         $property->save();
         $seller = User::find($property->seller_id);
@@ -377,7 +389,6 @@ class PropertyController extends Controller
             'booked' => $ans_booked,
             'rejected' => $ans_rejected,
         ], 200);
-
     }
 
     public function profitsByMonth(Request $request)

@@ -141,23 +141,21 @@ class UserController extends Controller
             'type' => 'admin',
         ]);
         return response()->json(['meesage' => 'تم اضافة المشرف بنجاح'], 200);
-
     }
     public function show_users_accounts()
     {
         $users = User::where('type', 'user')->get();
-        if ($users->isEmpty())
-        {
+        if ($users->isEmpty()) {
             return response()->json(['message' => 'لا يوجد مستخدمون حالياً'], 200);
         }
         return response()->json(['users' => $users], 200);
     }
-      public function count_users_accounts()
+    public function count_users_accounts()
     {
         $count = User::where('type', 'user')->count();
         return response()->json(['countusers' => $count], 200);
     }
-     public function show_sellers_accounts()
+    public function show_sellers_accounts()
     {
         $sellers_account = User::where('type', 'seller')->get();
         if ($sellers_account->isEmpty()) {
@@ -165,11 +163,9 @@ class UserController extends Controller
         }
         return response()->json($sellers_account);
     }
-      public function count_sellers_accounts()
+    public function count_sellers_accounts()
     {
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
-
-
     }
 }
