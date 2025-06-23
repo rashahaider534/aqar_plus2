@@ -402,5 +402,26 @@ public function profitsByMonth(Request $request)
         'profits' => $monthlyProfits,
     ],200);
 }
+public function sellerSolded (){
+    $seller=Auth::user();
+   $properties= $seller->properties->where('status','Sold');
+            return response()->json($properties, 200);
+}
+public function sellerRented (){
+    $seller=Auth::user();
+   $properties= $seller->properties->where('status','rented');
+            return response()->json($properties, 200);
+
+}
+public function sellerBooked (){
+    $seller=Auth::user();
+   $properties= $seller->properties->where('status','booked');
+            return response()->json($properties, 200);
+}
+public function sellerWaiting(){
+    $seller=Auth::user();
+   $properties= $seller->properties->where('status','waiting');
+            return response()->json($properties, 200);
+}
 
 }
