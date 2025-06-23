@@ -13,6 +13,7 @@ use App\Mail\Sendbuy;
 use Illuminate\Support\Facades\Mail;
 use App\Notifications\SendDocument;
 use App\Notifications\Soldtoseller;
+
 class PurchaseController extends Controller
 {
     public  function Purchase(Request $request)
@@ -38,7 +39,7 @@ class PurchaseController extends Controller
         }
 
         $seller = User::find($property->seller_id);
-        $sellername=$seller->name;
+        $sellername = $seller->name;
         $seller->balance += $purchprice;
         $seller->save();
 
@@ -62,16 +63,15 @@ class PurchaseController extends Controller
             'image_file' => $filePath,
         ]);
 
-        Notification::send($user, new  SendDocument($purchase,$sellername));
-        $user->notify(new Soldtoseller($purchase,$purchprice, now()));
+        Notification::send($user, new  SendDocument($purchase, $sellername));
+        $user->notify(new Soldtoseller($purchase, $purchprice, now()));
         return response()->json(['message' => 'تمت عملية الشراء بنجاح']);
     }
 
     public function show_purchases()
     {
-        $user=Auth::user();
-        $purchases=Purchase::with('property.images')->where('user_id',$user->id)->get();
-        return response()->json(['purchases'=>$purchases],200);
+        $user = Auth::user();
+        $purchases = Purchase::with('property.images')->where('user_id', $user->id)->get();
+        return response()->json(['purchases' => $purchases], 200);
     }
 }
-

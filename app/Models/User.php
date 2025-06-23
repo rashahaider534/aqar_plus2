@@ -10,61 +10,68 @@ use Laravel\Sanctum\HasApiTokens;
 
 class User extends Authenticatable
 {
-    use HasFactory, Notifiable,HasApiTokens;
+  use HasFactory, Notifiable, HasApiTokens;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
-    protected $guarded=['id'];
+  /**
+   * The attributes that are mass assignable.
+   *
+   * @var array<int, string>
+   */
+  protected $guarded = ['id'];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
-    protected $hidden = [
-        'password',
-        'remember_token',
+  /**
+   * The attributes that should be hidden for serialization.
+   *
+   * @var array<int, string>
+   */
+  protected $hidden = [
+    'password',
+    'remember_token',
+  ];
+
+  /**
+   * Get the attributes that should be cast.
+   *
+   * @return array<string, string>
+   */
+  protected function casts(): array
+  {
+    return [
+      'email_verified_at' => 'datetime',
+      'password' => 'hashed',
     ];
+  }
+  public function favoriteProperties()
+  {
+    return $this->belongsToMany(Property::class, 'favorites');
+  }
+  public function ratings()
+  {
+    return $this->hasMany(Rating::class);
+  }
+  public function rentals()
+  {
+    return $this->hasMany(Rental::class);
+  }
+  public function purchases()
+  {
+    return $this->hasMany(Purchase::class);
+  }
+  public function bookings()
+  {
+    return $this->hasMany(Booking::class);
+  }
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
-    {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
-    }
-     public function favoriteProperties(){
-     return $this->belongsToMany(Property::class,'favorites');
-   }
-   public function ratings(){
-      return $this->hasMany(Rating::class);
-   }
-    public function rentals(){
-      return $this->hasMany(Rental::class);
-   }
-      public function purchases(){
-      return $this->hasMany(Purchase::class);
-   }
-       public function bookings(){
-      return $this->hasMany(Booking::class);
-   }
-
-   public function block(){
+  public function block()
+  {
     return $this->hasOne(Block::class);
-   }
-     public function properties(){
-    return $this->hasMany(Property::class,'seller_id','id');
-   }
-    public function maintenances(){
-      return $this->hasMany(Maintenance::class);
-   }
-
+  }
+  public function properties()
+  {
+    return $this->hasMany(Property::class, 'seller_id', 'id');
+  }
+  public function maintenances()
+  {
+    return $this->hasMany(Maintenance::class);
+  }
 }

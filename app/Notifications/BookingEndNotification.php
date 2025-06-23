@@ -14,7 +14,7 @@ class BookingEndNotification extends Notification
     public $proprty_name;
     public function __construct($proprty_name)
     {
-        $this->proprty_name=$proprty_name;
+        $this->proprty_name = $proprty_name;
     }
 
     /**
@@ -31,8 +31,8 @@ class BookingEndNotification extends Notification
     public function toArray(object $notifiable): array
     {
         return [
-            'message'=>'تم انهاء حجز عقار' . $this->proprty_name . 'الخاص بك',
-            'time'=>now()
+            'message' => 'تم انهاء حجز عقار' . $this->proprty_name . 'الخاص بك',
+            'time' => now()
         ];
     }
 }
