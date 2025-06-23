@@ -17,7 +17,7 @@ class charge_balance extends Notification
     protected $balance;
     public function __construct($balance)
     {
-        $this->balance=$balance;
+        $this->balance = $balance;
     }
 
     /**
@@ -39,9 +39,9 @@ class charge_balance extends Notification
      */
     public function toArray(object $notifiable): array
     {
-         return [
+        return [
             'type' => 'charge',
-            'message' => 'تم شحن رصيدك  بمبلغ قدره "' . $this->balance ,
+            'message' => 'تم شحن رصيدك  بمبلغ قدره "' . $this->balance,
             'time' => now(),
         ];
     }

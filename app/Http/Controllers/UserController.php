@@ -141,6 +141,7 @@ class UserController extends Controller
             'type' => 'admin',
         ]);
         return response()->json(['meesage' => 'تم اضافة المشرف بنجاح'], 200);
+<<<<<<< HEAD
     }
     public function show_users_accounts()
     {
@@ -168,5 +169,7 @@ class UserController extends Controller
     {
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
+=======
+>>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
     }
 }

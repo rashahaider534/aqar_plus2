@@ -282,11 +282,9 @@ class PropertyController extends Controller
 
         return response()->json(['message' => 'تم رفض العقار بنجاح'], 200);
 
-           $seller=User::find($property->seller_id);
+        $seller = User::find($property->seller_id);
         $seller->notify(new RejectPropertyNotification($property->name));
-            return response()->json(['message'=>'تم رفض العقار بنجاح'],200);
-
-
+        return response()->json(['message' => 'تم رفض العقار بنجاح'], 200);
     }
     public function approve_property(Request $request)
     {
@@ -323,14 +321,13 @@ class PropertyController extends Controller
             return response()->json(['message' => 'العقار غير موجود'], 404);
         }
         $allratings = Rating::where('property_id', $request->property_id)->pluck('rating');
-        $avgratings=$allratings->avg();
-        $userrating=null;
-        if(Auth::check())
-        {
-            $user=Auth::user();
-            $userrating=Rating::where('property_id', $request->property_id)
-            ->where('user_id',$user->id)
-            ->value('rating');
+        $avgratings = $allratings->avg();
+        $userrating = null;
+        if (Auth::check()) {
+            $user = Auth::user();
+            $userrating = Rating::where('property_id', $request->property_id)
+                ->where('user_id', $user->id)
+                ->value('rating');
         }
 
         return response()->json([
@@ -353,6 +350,7 @@ class PropertyController extends Controller
         session()->flash('delete_at');
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
+<<<<<<< HEAD
     
     public function getPropertyStatusReport(Request $request){
     $count_property=Property::where('status','rejected')->where('status','waiting')->count();
@@ -390,18 +388,80 @@ public function profitsByMonth(Request $request)
     for ($i = 1; $i <= 12; $i++) {
         $month = str_pad($i, 2, '0', STR_PAD_LEFT);
         $monthlyProfits[$month] = 0;
+=======
+    public function getPropertyStatusReport(Request $request)
+    {
+        $count_property = Property::where('status', 'rejected')->where('status', 'waiting')->count();
+        if ($count_property == 0)
+            return response()->json([
+                'count_property' => 0,
+                'sold' => 0,
+                'booked' => 0,
+                'rejected' => 0,
+            ], 200);
+        $count_sold = Property::where('status', 'Sold')->count();
+        $ans_sold = ($count_sold * 100) / $count_property;
+        $count_booked = Property::where('status', 'booked')->count();
+        $ans_booked = ($count_booked * 100) / $count_property;
+        $count_rejected = Property::where('status', 'rejected')->count();
+        $ans_rejected = ($count_rejected * 100) / $count_property;
+        return response()->json([
+            'count_property' => $count_property,
+            'sold' => $ans_sold,
+            'booked' => $ans_booked,
+            'rejected' => $ans_rejected,
+        ], 200);
+>>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
     }
 
-    foreach ($purchases as $purchase) {
-        $month = $purchase->created_at->format('m');
-        $finalPrice = $purchase->property->final_price ?? 0;
-        $monthlyProfits[$month] += $finalPrice * 0.03;
+    public function profitsByMonth(Request $request)
+    {
+        $request->validate([
+            'year' => 'required|integer|min:2000|max:' . now()->year,
+        ]);
+        $year = $request->year;
+        $purchases = Purchase::with('property')
+            ->whereYear('created_at', $year)
+            ->get();
+        $monthlyProfits = [];
+        for ($i = 1; $i <= 12; $i++) {
+            $month = str_pad($i, 2, '0', STR_PAD_LEFT);
+            $monthlyProfits[$month] = 0;
+        }
+
+        foreach ($purchases as $purchase) {
+            $month = $purchase->created_at->format('m');
+            $finalPrice = $purchase->property->final_price ?? 0;
+            $monthlyProfits[$month] += $finalPrice * 0.03;
+        }
+
+        return response()->json([
+            'year' => $year,
+            'profits' => $monthlyProfits,
+        ], 200);
     }
-
-    return response()->json([
-        'year' => $year,
-        'profits' => $monthlyProfits,
-    ],200);
-}
-
+    public function sellerSolded()
+    {
+        $seller = Auth::user();
+        $properties = $seller->properties->where('status', 'Sold');
+        return response()->json($properties, 200);
+    }
+    public function sellerRented()
+    {
+        $seller = Auth::user();
+        $properties = $seller->properties->where('status', 'rented');
+        return response()->json($properties, 200);
+    }
+    public function sellerBooked()
+    {
+        $seller = Auth::user();
+        $properties = $seller->properties->where('status', 'booked');
+        return response()->json($properties, 200);
+    }
+    public function sellerWaiting()
+    {
+        $seller = Auth::user();
+        $properties = $seller->properties->where('status', 'waiting');
+        return response()->json($properties, 200);
+    }
 }

@@ -23,11 +23,11 @@ class LoginRequest extends FormRequest
     {
         return [
             'name' => 'required',
-              'password' => [
+            'password' => [
                 'required',
-                    // يحتوي على أرقام
-              ],
-            ];
+
+            ],
+        ];
     }
     public function messages(): array
     {

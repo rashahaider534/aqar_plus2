@@ -6,12 +6,14 @@ use Illuminate\Database\Eloquent\Model;
 
 class Block extends Model
 {
-      protected $guarded=['id'];
-      
-   public function user(){
+    protected $guarded = ['id'];
+
+    public function user()
+    {
         return $this->belongsTo(User::class);
     }
-    public function admin(){
+    public function admin()
+    {
         return $this->belongsTo(Admin::class);
     }
 }

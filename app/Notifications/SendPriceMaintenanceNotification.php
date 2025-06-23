@@ -15,12 +15,12 @@ class SendPriceMaintenanceNotification extends Notification
     public $period;
     public $name_property;
     public $type_maintenance;
-    public function __construct($price,$period,$name_property,$type_maintenance)
+    public function __construct($price, $period, $name_property, $type_maintenance)
     {
-        $this->price=$price;
-        $this->period=$period;
-        $this->name_property=$name_property;
-        $this->type_maintenance=$type_maintenance;
+        $this->price = $price;
+        $this->period = $period;
+        $this->name_property = $name_property;
+        $this->type_maintenance = $type_maintenance;
     }
 
     public function via(object $notifiable): array
@@ -30,13 +30,12 @@ class SendPriceMaintenanceNotification extends Notification
 
     public function toArray(object $notifiable): array
     {
-    return [
-           'message' => 'تم النظر في مشكلة الصيانة التي من نوع ' . $this->type_maintenance .
-                 ' للعقار ' . $this->name_property .
-                 '، حيث بلغ سعر الصيانة ' . $this->price . ' دولار' .
-                 '، بمدة تتراوح إلى ' . $this->period . ' يوم.',
-           'time' => now()
-           ];
-
+        return [
+            'message' => 'تم النظر في مشكلة الصيانة التي من نوع ' . $this->type_maintenance .
+                ' للعقار ' . $this->name_property .
+                '، حيث بلغ سعر الصيانة ' . $this->price . ' دولار' .
+                '، بمدة تتراوح إلى ' . $this->period . ' يوم.',
+            'time' => now()
+        ];
     }
 }

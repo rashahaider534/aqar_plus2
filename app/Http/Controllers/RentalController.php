@@ -8,10 +8,10 @@ use Illuminate\Support\Facades\Auth;
 
 class RentalController extends Controller
 {
-     public function show_rental()
+    public function show_rental()
     {
-        $user=Auth::user();
-        $rental=Rental::with('property.images')->where('user_id',$user->id)->get();
-        return response()->json(['rental'=>$rental],200);
+        $user = Auth::user();
+        $rental = Rental::with('property.images')->where('user_id', $user->id)->get();
+        return response()->json(['rental' => $rental], 200);
     }
 }

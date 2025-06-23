@@ -45,6 +45,17 @@ class PropertyController extends Controller
 
         return response()->json(['archived_properties' => $archivedProperties], 200);
     }
+<<<<<<< HEAD
    
 
+=======
+    public function show_sellers_accounts()
+    {
+        $sellers_account = User::where('type', 'seller')->get();
+        if ($sellers_account->isEmpty()) {
+            return response()->json(['message' => 'لا يوجد بائعون مسجلون حالياً'], 200);
+        }
+        return response()->json($sellers_account);
+    }
+>>>>>>> bc07fa14037c55838bb8454f33022a7b37d01b3b
 }
