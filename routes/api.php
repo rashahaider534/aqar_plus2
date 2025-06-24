@@ -14,10 +14,6 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 
-
-//Route::post('1',[PropertyController::class,'getPropertyStatusReport']);searchAdmin addProperty
-
-//Route::post('1', [PropertyC::class, 'addProperty']);
 Route::post('user/register', [AuthController::class, 'register_user']);
 //login
 Route::post('/user/login', [AuthController::class, 'login_user']);
@@ -27,7 +23,6 @@ Route::post('/Super_Admin/login', [AuthController::class, 'login_admin']);
 //not token
 Route::post('filter/properties', [PropertyController::class, 'filter']);
 Route::post('property_details', [PropertyController::class, 'property_details']);
-//Route::post('1',[PropertyController::class,'approve_property']);
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {

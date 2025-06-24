@@ -7,6 +7,7 @@ use App\Models\Property;
 use App\Models\User;
 use App\Notifications\SendPriceMaintenanceNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class MaintenanceController extends Controller
 {
@@ -59,5 +60,18 @@ class MaintenanceController extends Controller
             return response()->json(['message' => 'طلب الصيانة غير موجود'], 404);
         }
         return response()->json($maintenance);
+    }
+    public function addMaintenance(Request $request){
+        $request->validate([
+            'maintenance' => ['required', 'unique:admins,name'],
+        ], [
+            'maintenance.required' => 'يجيب ادخال هذا الحقل',
+        
+        ]);
+        $user=Auth::user();
+        
+       
+        
+        
     }
 }
