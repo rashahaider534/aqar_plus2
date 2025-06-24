@@ -15,11 +15,10 @@ return new class extends Migration
             $table->id();
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
-            $table->time('start_rentals');
-            $table->time('end_rentals');
-            $table->integer('Rental period');
+            $table->date('end_rentals');
             $table->boolean('active')->default(1);
             $table->string('image_file');
+            $table->string('full_name');
             $table->integer('National Number');
             $table->timestamps();
         });

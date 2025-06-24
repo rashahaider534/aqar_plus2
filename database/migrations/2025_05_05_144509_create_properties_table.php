@@ -19,12 +19,13 @@ return new class extends Migration
             $table->string('type');
             $table->enum('status',['booked ','rejected ','available','Sold','rented','waiting'])->default('waiting');
             $table->string('ownership_image');
+            $table->integer('month')->nullable();
             $table->integer('room')->nullable();
             $table->string('name_admin')->nullable();
             $table->float('final_price')->nullable();
             $table->float('area');
             $table->text('description')->nullable();
-             $table->softDeletes();
+            $table->softDeletes();
             $table->timestamps();
         });
     }

@@ -34,8 +34,6 @@ class BookingController extends Controller
             $booking =  Booking::create([
                 'property_id' => $property->id,
                 'user_id' => Auth::id(),
-                'start_rentals' => now()->toDateString(),
-                'end_rentals' => now()->addDays(5)->toDateString(),
                 'active' => 1
             ]);
             $property->update([
@@ -93,7 +91,7 @@ class BookingController extends Controller
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('images', $fileName, 'public'); // Saves in storage/app/public/profile_photos
+            $filePath = $file->storeAs('Personal identity', $fileName, 'public'); // Saves in storage/app/public/profile_photos
         }
         $purchase = Purchase::create([
             'user_id' => $user->id,

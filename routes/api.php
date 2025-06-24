@@ -9,6 +9,7 @@ use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MaintenanceController;
 use App\Http\Controllers\ProvincesController;
+use App\Http\Controllers\RentalController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -30,6 +31,7 @@ Route::post('property_details', [PropertyController::class, 'property_details'])
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
+     Route::post('1', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_user']);
     Route::post('add/rating', [PropertyController::class, 'addRating']);
     Route::get('properties', [PropertyController::class, 'user_properties']);
@@ -54,6 +56,7 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
+      Route::post('1', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_seller']);
     Route::post('add/rating', [PropertyController::class, 'addRating']);
     Route::post('add/property', [PropertyController::class, 'addProperty']);

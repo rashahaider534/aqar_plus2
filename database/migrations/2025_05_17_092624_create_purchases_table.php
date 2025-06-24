@@ -16,8 +16,8 @@ return new class extends Migration
             $table->foreignId('property_id')->constrained('properties')->onDelete('cascade');
             $table->foreignId('user_id')->constrained('users')->onDelete('cascade');
            // $table->string('type');
-           // $table->time('purchase_date');
-            $table->string('identity_document');
+            $table->time('purchase_date');
+           $table->string('identity_document');
             $table->string('image_file');
             $table->string('full_name');
              $table->integer('National_Number');
