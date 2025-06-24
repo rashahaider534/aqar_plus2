@@ -23,7 +23,7 @@ class PropertyController extends Controller
 {
     public function addRating(Request $request)
     {
-        $user=Auth::user();
+        $user = Auth::user();
         Rating::create([
             'property_id' => $request->property_id,
             'user_id' => $user->id,
@@ -32,54 +32,46 @@ class PropertyController extends Controller
         return response()->json(['message' => 'تم اضافة التقيم بنجاح'], 200);
     }
     //no token
-
-    public function properties()
+    public function filter(Request $request)
     {
-        $properties = Property::where('status', 'available')->get();
+        $properties = Property::where('status', 'available');
+        if ($request->name)
+            $properties->where('name', $request->name);
+        if ($request->room)
+            $properties->where('room', $request->room);
+        if ($request->province) {
+            $province = Province::where('string', $request->province)->first();
+            $properties->where('province_id', $province->id);
+        }
+        if ($request->start_range && $request->end_range)
+            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
+        if ($request->area)
+            $properties->where('area', $request->area);
+        if ($request->type)
+            $properties->where('type', $request->type);
+        $properties = $properties->get();
         return response()->json($properties, 200);
     }
-    public function filter_name(Request $request)
-    {
-        $properties = Property::where('status', 'available')->where('name', $request->name_property)->get();
-        return response()->json($properties, 200);
-    }
-    public function filter_room(Request $request)
-    {
-        $properties = Property::where('status', 'available')->where('room', $request->room_property)->get();
-        return response()->json($properties, 200);
-    }
-
-    public function filter_province(Request $request)
-    {
-        $province = Province::where('string', $request->province_property)->first();
-        $properties =  $province->properties->where('status', 'available');
-        return response()->json($properties, 200);
-    }
-
-    public function filter_price(Request $request)
-    {
-        $properties = Property::where('status', 'available')->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range)->get();
-        return response()->json($properties, 200);
-    }
-
-    public function filter_area(Request $request)
-    {
-        $properties = Property::where('status', 'available')->where('area', $request->area_property)->get();
-        return response()->json($properties, 200);
-    }
-
-    public function filter_type(Request $request)
-    {
-        $properties = Property::where('status', 'available')->where('type', $request->type_property)->get();
-        return response()->json($properties, 200);
-    }
-
     //user
-
-    public function user_properties()
+    public function filter_user(Request $request)
     {
         $user = Auth::user();
-        $properties = Property::where('status', 'available')->get();
+        $properties = Property::where('status', 'available');
+        if ($request->name)
+            $properties->where('name', $request->name);
+        if ($request->room)
+            $properties->where('room', $request->room);
+        if ($request->province) {
+            $province = Province::where('string', $request->province)->first();
+            $properties->where('province_id', $province->id);
+        }
+        if ($request->start_range && $request->end_range)
+            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
+        if ($request->area)
+            $properties->where('area', $request->area);
+        if ($request->type)
+            $properties->where('type', $request->type);
+        $properties = $properties->get();
         for ($i = 0; $i < count($properties); $i++) {
             if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
                 $properties[$i]['is_favorite'] = true;
@@ -88,135 +80,43 @@ class PropertyController extends Controller
         }
         return response()->json($properties, 200);
     }
-
-    public function filter_name_user(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('name', $request->name_property)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_room_user(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('room', $request->room_property)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_province_user(Request $request)
-    {
-        $user = Auth::user();
-        $province = Province::where('string', $request->province_property)->first();
-        $properties =  $province->properties->where('status', 'available');
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_price_user(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_area_user(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('area', $request->area_property)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-    public function filter_type_user(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('type', $request->type_property)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
     //admin and suberadmin
-    public function filter_status_Admin(Request $request)
+    public function filter_admin(Request $request)
     {
-        $properties = Property::where('status', $request->status_property)->get();
-        return response()->json($properties, 200);
-    }
-    public function filter_seller_Admin(Request $request)
-    {
-        $seller = User::where('name', $request->name_seller)->first();
-        return response()->json($seller->properties, 200);
-    }
-    public function filter_name_Admin(Request $request)
-    {
-        $properties = Property::where('name', $request->name_property)->get();
+        $properties = Property::query();
+        if ($request->status)
+            $properties->where('status', $request->status);
+        if ($request->name_seller) {
+            $seller = User::where('name', $request->name_seller)->first();
+            $properties->where('seller_id', $seller->id);
+        }
+        if ($request->type)
+            $properties->where('type', $request->type);
+        $properties = $properties->get();
         return response()->json($properties, 200);
     }
 
     //seller
 
-    public function seller_properties()
+    public function filter_seller(Request $request)
     {
         $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
+        $properties = Property::where('status', 'available');
+        if ($request->name)
+            $properties->where('name', $request->name);
+        if ($request->room)
+            $properties->where('room', $request->room);
+        if ($request->province) {
+            $province = Province::where('string', $request->province)->first();
+            $properties->where('province_id', $province->id);
         }
-        // $properties=$properties->where('seller_id','!=',$user->id)->get();
-        return response()->json($properties, 200);
-    }
-
-    public function filter_name_seller(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('name', $request->name_property)->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_room_seller(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('room', $request->room_property)->where('seller_id', '!=', $user->id)->get();
+        if ($request->start_range && $request->end_range)
+            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
+        if ($request->area)
+            $properties->where('area', $request->area);
+        if ($request->type)
+            $properties->where('type', $request->type);
+        $properties = $properties->where('seller_id', '!=', $user->id)->get();
         for ($i = 0; $i < count($properties); $i++) {
             if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
                 $properties[$i]['is_favorite'] = true;
@@ -226,57 +126,7 @@ class PropertyController extends Controller
         return response()->json($properties, 200);
     }
 
-    public function filter_province_seller(Request $request)
-    {
-        $user = Auth::user();
-        $province = Province::where('string', $request->province_property)->first();
-        $properties =  $province->properties()->where('status', 'available')->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
 
-    public function filter_price_seller(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range)->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-
-    public function filter_area_seller(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('area', $request->area_property)->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
-    public function filter_type_seller(Request $request)
-    {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available')->where('type', $request->type_property)->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
-    }
     public function waitProperties()
     {
         $properties = Property::where('status', 'waiting')->get();
@@ -465,7 +315,7 @@ class PropertyController extends Controller
             $favUser->notify(new PropertyPriceUpdated($property));
         }
         return response()->json(['meesage' => '  تم تعديل السعر و ارسال اشعار للمهتمين'], 200);
-
+    }
     public function addProperty(AddPropertyRequest $request)
     {
         $seller = Auth::user();
@@ -501,6 +351,5 @@ class PropertyController extends Controller
             $admin->notify(new AddPropertyNotification($seller->name));
         }
         return response()->json(['meesage' => 'تم اضافة العقار بنجاح'], 200);
-
     }
 }
