@@ -88,7 +88,6 @@ class UserController extends Controller
     public function pendingSellers()
     {
         $pendingSellers = User::where('consent', 'waiting')->where('type', 'seller')->get();
-        $pendingSellers = User::where('consent', 'waiting')->where('type', 'seller')->get();
         return response()->json($pendingSellers, 200);
     }
     public function approveAccountSeller(Request $request)

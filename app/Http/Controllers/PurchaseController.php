@@ -51,7 +51,7 @@ class PurchaseController extends Controller
         if ($request->hasFile('image_file')) {
             $file = $request->file('image_file');
             $fileName = time() . '.' . $file->getClientOriginalExtension();
-            $filePath = $file->storeAs('images', $fileName, 'public'); // Saves in storage/app/public/profile_photos
+            $filePath = $file->storeAs('Personal identity', $fileName, 'public'); // Saves in storage/app/public/profile_photos
         }
         $purchase = Purchase::create([
             'user_id' => $user->id,
@@ -60,7 +60,7 @@ class PurchaseController extends Controller
             'National_Number' => $request->National_Number,
             'purchase_date' => now(),
             'identity_document' => 'wee',
-            'image_file' => $filePath,
+            'image_file' =>asset('storage/' . $filePath),
         ]);
 
         Notification::send($user, new  SendDocument($purchase, $sellername));

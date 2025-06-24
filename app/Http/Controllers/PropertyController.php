@@ -325,30 +325,58 @@ class PropertyController extends Controller
             $filePath = $file->storeAs('ownership_doc', $fileName, 'public'); // Saves in storage/app/public/ownership_doc
         }
         $province = Province::where('string', $request->province)->first();
-        $property = Property::create([
-            'seller_id' => $seller->id,
-            'province_id' => $province->id,
-            'name' => $request->name,
-            'type' => $request->type,
-            'ownership_image' => asset('storage/' . $filePath),
-            'room' => $request->room,
-            'final_price' => $request->final_price,
-            'price' => $request->final_price,
-            'area' => $request->area,
-            'description' => $request->description,
-        ]);
-        foreach ($request->file('images') as $img) {
-            $path = $img->store('property_images', 'public');
-
-            $image = Image::create([
-                'property_id' => $property->id,
-                'image_path' => asset('storage/' . $path),
+        if ($request->type == 'rent') {
+            $property = Property::create([
+                'seller_id' => $seller->id,
+                'province_id' => $province->id,
+                'name' => $request->name,
+                'type' => $request->type,
+                'ownership_image' => asset('storage/' . $filePath),
+                'room' => $request->room,
+                'final_price' => $request->final_price,
+                'area' => $request->area,
+                'description' => $request->description,
+                'month' => $request->month
             ]);
-        }
-        $property = Property::with('images')->find($property->id);
-        $admins = Admin::where('type', 'admin')->get();
-        foreach ($admins as $admin) {
-            $admin->notify(new AddPropertyNotification($seller->name));
+            foreach ($request->file('images') as $img) {
+                $path = $img->store('property_images', 'public');
+
+                Image::create([
+                    'property_id' => $property->id,
+                    'image_path' => asset('storage/' . $path),
+                ]);
+            }
+            $property = Property::with('images')->find($property->id);
+            $admins = Admin::where('type', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new AddPropertyNotification($seller->name));
+            }
+        } else {
+            $property = Property::create([
+                'seller_id' => $seller->id,
+                'province_id' => $province->id,
+                'name' => $request->name,
+                'type' => $request->type,
+                'ownership_image' => asset('storage/' . $filePath),
+                'room' => $request->room,
+                'final_price' => $request->final_price + ($request->final_price * 0.03),
+                'area' => $request->area,
+                'description' => $request->description,
+
+            ]);
+            foreach ($request->file('images') as $img) {
+                $path = $img->store('property_images', 'public');
+
+                Image::create([
+                    'property_id' => $property->id,
+                    'image_path' => asset('storage/' . $path),
+                ]);
+            }
+            $property = Property::with('images')->find($property->id);
+            $admins = Admin::where('type', 'admin')->get();
+            foreach ($admins as $admin) {
+                $admin->notify(new AddPropertyNotification($seller->name));
+            }
         }
         return response()->json(['meesage' => 'تم اضافة العقار بنجاح'], 200);
     }
