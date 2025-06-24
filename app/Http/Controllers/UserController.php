@@ -111,22 +111,51 @@ class UserController extends Controller
             return response()->json(['meesage' => 'تم السماح للحساب بنجاح'], 200);
         }
     }
+    public function searchAdmin(Request $request)
+    {
+        $name = $request->name;
+        $users = Admin::all();
+        $request_users = array();
+        foreach ($users as $user) {
+            if (str_contains(strtolower($user->name), strtolower($name)))
+                array_push($request_users, $user);
+        }
+        return response()->json($request_users, 200);
+    }
+    public function addAdmin(Request $request)
+    {
 
+        $request->validate([
+            'name' => ['required', 'unique:admins,name'],
+            'password' => ['required', 'max:8'],
+        ], [
+            'name.required' => 'يجب ادخال الاسم',
+            'name.unique'  => 'هذا الاسم موجود بالفعل',
+
+            'password.required' => 'يجب ادخال كلمة السر',
+            'password.max'  => 'يجب ان تكون كلمة السر اكبر من ثماني ارقام',
+        ]);
+        Admin::create([
+            'name' => $request->name,
+            'password' => Hash::make($request->password),
+            'type' => 'admin',
+        ]);
+        return response()->json(['meesage' => 'تم اضافة المشرف بنجاح'], 200);
+    }
     public function show_users_accounts()
     {
         $users = User::where('type', 'user')->get();
-        if ($users->isEmpty())
-        {
+        if ($users->isEmpty()) {
             return response()->json(['message' => 'لا يوجد مستخدمون حالياً'], 200);
         }
         return response()->json(['users' => $users], 200);
     }
-      public function count_users_accounts()
+    public function count_users_accounts()
     {
         $count = User::where('type', 'user')->count();
         return response()->json(['countusers' => $count], 200);
     }
-     public function show_sellers_accounts()
+    public function show_sellers_accounts()
     {
         $sellers_account = User::where('type', 'seller')->get();
         if ($sellers_account->isEmpty()) {
@@ -134,10 +163,9 @@ class UserController extends Controller
         }
         return response()->json($sellers_account);
     }
-      public function count_sellers_accounts()
+    public function count_sellers_accounts()
     {
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
-
     }
 }
