@@ -447,7 +447,7 @@ class PropertyController extends Controller
         $sellers = User::where('name_admin', $admin->name)->get();
         return response()->json($sellers, 200);
     }
-<<<<<<< HEAD
+
     public function update_price(Request $request)
     {
         $user = Auth::user();
@@ -465,7 +465,7 @@ class PropertyController extends Controller
             $favUser->notify(new PropertyPriceUpdated($property));
         }
         return response()->json(['meesage' => '  تم تعديل السعر و ارسال اشعار للمهتمين'], 200);
-=======
+
     public function addProperty(AddPropertyRequest $request)
     {
         $seller = Auth::user();
@@ -501,6 +501,6 @@ class PropertyController extends Controller
             $admin->notify(new AddPropertyNotification($seller->name));
         }
         return response()->json(['meesage' => 'تم اضافة العقار بنجاح'], 200);
->>>>>>> 3afe158ffc9757b0f1110e2ff36ff86d06d4b1f7
+
     }
 }
