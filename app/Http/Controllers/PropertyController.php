@@ -11,6 +11,7 @@ use App\Models\Rejected;
 use App\Models\User;
 use App\Notifications\ApprovePropertyNotification;
 use App\Notifications\RejectPropertyNotification;
+use App\Notifications\PropertyPriceUpdated;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
@@ -348,7 +349,6 @@ class PropertyController extends Controller
             return response()->json(['message' => 'العقار غير موجود أو غير متاح للحذف'], 404);
         }
         $property->delete();
-        session()->flash('delete_at');
         return response()->json(['meesage' => 'تم حذف العقار بنجاح'], 200);
     }
 
@@ -375,7 +375,6 @@ class PropertyController extends Controller
             'booked' => $ans_booked,
             'rejected' => $ans_rejected,
         ], 200);
-
     }
 
     public function profitsByMonth(Request $request)
@@ -433,5 +432,23 @@ class PropertyController extends Controller
         $admin = Admin::find($request->admin_id);
         $sellers = User::where('name_admin', $admin->name)->get();
         return response()->json($sellers, 200);
+    }
+    public function update_price(Request $request)
+    {
+        $user = Auth::user();
+        $property = Property::where('id', $request->property_id)
+            ->where('seller_id', $user->id)
+            ->first();
+        if (!$property) {
+            return response()->json(['message' => 'العقار غير موجود أو لا تملكه'], 404);
+        }
+        $property->update([
+            'final_price' => $request->price
+        ]);
+        $favoriteUsers = $property->favoriteByUsers()->get();
+        foreach ($favoriteUsers as $favUser) {
+            $favUser->notify(new PropertyPriceUpdated($property));
+        }
+        return response()->json(['meesage' => '  تم تعديل السعر و ارسال اشعار للمهتمين'], 200);
     }
 }
