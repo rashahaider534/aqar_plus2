@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Notifications\charge_balance;
+use App\Notifications\RequsetBeSeller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Notification;
@@ -166,5 +167,18 @@ class UserController extends Controller
     {
         $count = User::where('type', 'seller')->count();
         return response()->json(['countseller' => $count], 200);
+    }
+    public function requset_beseller()
+    {
+        $user = Auth::user();
+        if($user->consent !='not_requested')
+        {
+            return response()->json(['message'=>'لا يمكنك ارسال طلب ترقية '],200);
+        }
+        $user->consent = 'waiting';
+        $user->save();
+        $admins = Admin::where('type', 'admin')->get();
+       Notification::send($admins, new RequsetBeSeller(now()));
+        return response()->json(['message' => 'تم ارسال الطلب'], 200);
     }
 }
