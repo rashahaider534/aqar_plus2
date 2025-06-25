@@ -73,7 +73,7 @@ class AuthController extends Controller
   public function logout(Request  $request)
   {
     $request->user()->currentAccessToken()->delete();
-    return response()->json(['message' => 'logout successfully'], 200);
+    return response()->json(['message' => 'تم الخروج بنجاح'], 200);
   }
   public function checkcode(Request  $request)
   {
@@ -90,5 +90,14 @@ class AuthController extends Controller
       return response()->json([
         'message' => 'Incorrect code',
       ], 422);
+  }
+  public function ref_code(Request  $request)
+  {
+    $user = Auth::user();
+    $code = rand(10000, 99999);
+    $user->code = $code;
+    $user->save();
+    Mail::to($user->email)->send(new welcome($code));
+    return response()->json(['message' => 'تم اعادة الارسال'], 200);
   }
 }
