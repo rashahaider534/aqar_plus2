@@ -43,10 +43,10 @@ class PropertyController extends Controller
             $province = Province::where('string', $request->province)->first();
             $properties->where('province_id', $province->id);
         }
-        if ($request->start_range && $request->end_range)
-            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
-        if ($request->area)
-            $properties->where('area', $request->area);
+        if ($request->price_start && $request->price_end)
+            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
+        if ($request->area_start && $request->area_end)
+            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
         if ($request->type)
             $properties->where('type', $request->type);
         $properties = $properties->get();
@@ -65,10 +65,10 @@ class PropertyController extends Controller
             $province = Province::where('string', $request->province)->first();
             $properties->where('province_id', $province->id);
         }
-        if ($request->start_range && $request->end_range)
-            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
-        if ($request->area)
-            $properties->where('area', $request->area);
+        if ($request->price_start && $request->price_end)
+            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
+        if ($request->area_start && $request->area_end)
+            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
         if ($request->type)
             $properties->where('type', $request->type);
         $properties = $properties->get();
@@ -101,6 +101,7 @@ class PropertyController extends Controller
     public function filter_seller(Request $request)
     {
         $user = Auth::user();
+
         $properties = Property::where('status', 'available');
         if ($request->name)
             $properties->where('name', $request->name);
@@ -110,12 +111,13 @@ class PropertyController extends Controller
             $province = Province::where('string', $request->province)->first();
             $properties->where('province_id', $province->id);
         }
-        if ($request->start_range && $request->end_range)
-            $properties->where('final_price', '>=', $request->start_range)->where('final_price', '<=', $request->end_range);
-        if ($request->area)
-            $properties->where('area', $request->area);
+        if ($request->price_start && $request->price_end)
+            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
+        if ($request->area_start && $request->area_end)
+            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
         if ($request->type)
             $properties->where('type', $request->type);
+        $properties = $properties->get();
         $properties = $properties->where('seller_id', '!=', $user->id)->get();
         for ($i = 0; $i < count($properties); $i++) {
             if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())

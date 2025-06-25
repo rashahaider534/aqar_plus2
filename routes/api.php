@@ -26,7 +26,8 @@ Route::post('property_details', [PropertyController::class, 'property_details'])
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
-     Route::post('renting', [RentalController::class, 'renting']);
+    Route::post('refresh/code', [AuthController::class, 'ref_code']);
+    Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_user']);
     Route::post('add/rating', [PropertyController::class, 'addRating']);
     Route::get('properties', [PropertyController::class, 'user_properties']);
@@ -51,7 +52,8 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
-      Route::post('renting', [RentalController::class, 'renting']);
+    Route::post('refresh/code', [AuthController::class, 'ref_code']);
+    Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_seller']);
     Route::post('add/rating', [PropertyController::class, 'addRating']);
     Route::post('add/property', [PropertyController::class, 'addProperty']);
