@@ -171,14 +171,13 @@ class UserController extends Controller
     public function requset_beseller()
     {
         $user = Auth::user();
-        if($user->consent !='not_requested')
-        {
-            return response()->json(['message'=>'لا يمكنك ارسال طلب ترقية '],200);
+        if ($user->consent != 'not_requested') {
+            return response()->json(['message' => 'لا يمكنك ارسال طلب ترقية '], 200);
         }
         $user->consent = 'waiting';
         $user->save();
         $admins = Admin::where('type', 'admin')->get();
-       Notification::send($admins, new RequsetBeSeller(now()));
+        Notification::send($admins, new RequsetBeSeller(now()));
         return response()->json(['message' => 'تم ارسال الطلب'], 200);
     }
 }

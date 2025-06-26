@@ -67,7 +67,7 @@ class PropertyController extends Controller
     public function properties_purchase_rental_booking()
     {
         $purchases = Purchase::with('property.user')->get();
-        $bookings= Booking::with('property.user')->get();
+        $bookings = Booking::with('property.user')->get();
         $rentals = Rental::with('property.user')->get();
         return response()->json([
             'purchased_properties' => $purchases,

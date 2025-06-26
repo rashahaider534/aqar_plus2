@@ -27,7 +27,12 @@ Route::post('property_details', [PropertyController::class, 'property_details'])
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
-    Route::get('notification', [NotificationController::class, 'unread_user']);
+      Route::post('reject/maintenance', [MaintenanceController::class, 'rejectMaintenance']);
+      Route::post('approve/maintenance', [MaintenanceController::class, 'approveMaintenance']);
+    Route::post('add/maintenance', [MaintenanceController::class, 'addMaintenance']);
+    Route::post('mark/notification', [NotificationController::class, 'markAsRead_user']);
+    Route::get('mark/all/notification', [NotificationController::class, 'markAllAsRead_user']);
+    Route::get('notification', [NotificationController::class, 'index_user']);
     Route::post('refresh/code', [AuthController::class, 'ref_code']);
     Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_user']);
@@ -51,11 +56,16 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
     Route::get('show_purchases', [PurchaseController::class, 'show_purchases']);
     Route::get('show_booking', [BookingController::class, 'show_booking']);
     Route::get('show_rental', [BookingController::class, 'show_rental']);
-    Route::get('requset_beseller',[UserController::class,'requset_beseller']);
+    Route::get('requset_beseller', [UserController::class, 'requset_beseller']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
-     Route::get('notification', [NotificationController::class, 'unread_user']);
+    Route::post('reject/maintenance', [MaintenanceController::class, 'rejectMaintenance']);
+      Route::post('approve/maintenance', [MaintenanceController::class, 'approveMaintenance']);
+    Route::post('add/maintenance', [MaintenanceController::class, 'addMaintenance']);
+    Route::post('mark/notification', [NotificationController::class, 'markAsRead_user']);
+    Route::get('mark/all/notification', [NotificationController::class, 'markAllAsRead_user']);
+    Route::get('notification', [NotificationController::class, 'index_user']);
     Route::post('refresh/code', [AuthController::class, 'ref_code']);
     Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_seller']);
@@ -84,11 +94,12 @@ Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(func
     Route::get('show_booking', [BookingController::class, 'show_booking']);
     Route::get('show_rental', [BookingController::class, 'show_rental']);
     Route::post('update_price', [PropertyController::class, 'update_price']);
-
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(function () {
-     Route::get('notification', [NotificationController::class, 'unread_admin']);
+    Route::post('mark/notification', [NotificationController::class, 'markAsRead_admin']);
+    Route::get('mark/all/notification', [NotificationController::class, 'markAllAsRead_admin']);
+    Route::get('notification', [NotificationController::class, 'index_admin']);
     Route::post('request/maintenance', [MaintenanceController::class, 'fixCost']);
     Route::post('approve/seller', [UserController::class, 'approveAccountSeller']);
     Route::get('account/sellers', [UserController::class, 'pendingSellers']);
@@ -108,7 +119,9 @@ Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(functi
 });
 //SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->group(function () {
-     Route::get('notification', [NotificationController::class, 'unread_admin']);
+    Route::post('mark/notification', [NotificationController::class, 'markAsRead_admin']);
+    Route::get('mark/all/notification', [NotificationController::class, 'markAllAsRead_admin']);
+    Route::get('notification', [NotificationController::class, 'index_admin']);
     Route::post('add/admin', [\App\Http\Controllers\Admin\AdminController::class, 'addAdmin']);
     Route::post('search/admin', [\App\Http\Controllers\Admin\AdminController::class, 'searchAdmin']);
     Route::post('/property-status-percentages', [PropertyController::class, 'getPropertyStatusReport']);
