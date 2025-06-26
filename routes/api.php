@@ -51,6 +51,7 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
     Route::get('show_purchases', [PurchaseController::class, 'show_purchases']);
     Route::get('show_booking', [BookingController::class, 'show_booking']);
     Route::get('show_rental', [BookingController::class, 'show_rental']);
+    Route::get('requset_beseller',[UserController::class,'requset_beseller']);
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
@@ -83,6 +84,7 @@ Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(func
     Route::get('show_booking', [BookingController::class, 'show_booking']);
     Route::get('show_rental', [BookingController::class, 'show_rental']);
     Route::post('update_price', [PropertyController::class, 'update_price']);
+
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(function () {
