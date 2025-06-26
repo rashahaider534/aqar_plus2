@@ -10,10 +10,10 @@ class OnEndJob implements ShouldQueue
 {
     use Queueable;
 
-   public $user;
+    public $user;
     public function __construct($user)
     {
-        $this->user=$user;
+        $this->user = $user;
     }
 
     /**
@@ -21,6 +21,6 @@ class OnEndJob implements ShouldQueue
      */
     public function handle(): void
     {
-       $this->user->notify(new OnEndNotification());
+        $this->user->notify(new OnEndNotification());
     }
 }

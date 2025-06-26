@@ -60,7 +60,7 @@ class PurchaseController extends Controller
             'National_Number' => $request->National_Number,
             'purchase_date' => now(),
             'identity_document' => 'wee',
-            'image_file' =>asset('storage/' . $filePath),
+            'image_file' => asset('storage/' . $filePath),
         ]);
 
         Notification::send($user, new  SendDocument($purchase, $sellername));

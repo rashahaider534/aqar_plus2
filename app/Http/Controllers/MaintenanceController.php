@@ -2,9 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Admin;
 use App\Models\Maintenance;
 use App\Models\Property;
 use App\Models\User;
+use App\Notifications\AddMaintenanceNotification;
+use App\Notifications\ApproveMaintenanceNotification;
+use App\Notifications\ApprovePropertyNotification;
+use App\Notifications\RejectMaintenanceNotification;
 use App\Notifications\SendPriceMaintenanceNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -61,17 +66,43 @@ class MaintenanceController extends Controller
         }
         return response()->json($maintenance);
     }
-    public function addMaintenance(Request $request){
+    public function addMaintenance(Request $request)
+    {
         $request->validate([
             'maintenance' => ['required', 'unique:admins,name'],
         ], [
             'maintenance.required' => 'يجيب ادخال هذا الحقل',
-        
         ]);
-        $user=Auth::user();
-        
-       
-        
-        
+        $user = Auth::user();
+        Maintenance::create([
+            'property_id' => $request->property_id,
+            'user_id' => $user->id,
+            'type' => $request->type,
+            'description' => $request->maintenance
+        ]);
+        $admins = Admin::where('type', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new AddMaintenanceNotification());
+        }
+        return response()->json(['message' => 'تم ارسال طلب الصيانة بنجاح'], 200);
+    }
+    public function approveMaintenance(Request $request)
+    {
+        $maintenance = Maintenance::find($request->maintenance_id);
+        $maintenance->status = 'approved';
+        $maintenance->save();
+        $admins = Admin::where('type', 'admin')->get();
+        foreach ($admins as $admin) {
+            $admin->notify(new ApproveMaintenanceNotification());
+        }
+        return response()->json(['message' => 'تم الوافقة على الصيانة بنجاح'], 200);
+    }
+    public function rejectMaintenance(Request $request)
+    {
+        $maintenance = Maintenance::find($request->maintenance_id);
+        $maintenance->status = 'rejected';
+        $maintenance->save();
+
+        return response()->json(['message' => 'تم رفض على الصيانة بنجاح'], 200);
     }
 }
