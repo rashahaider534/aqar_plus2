@@ -8,6 +8,7 @@ use App\Http\Controllers\PurchaseController;
 use App\Http\Controllers\PropertyController;
 use App\Http\Controllers\FavoriteController;
 use App\Http\Controllers\MaintenanceController;
+use App\Http\Controllers\NotificationController;
 use App\Http\Controllers\ProvincesController;
 use App\Http\Controllers\RentalController;
 use Illuminate\Http\Request;
@@ -26,6 +27,7 @@ Route::post('property_details', [PropertyController::class, 'property_details'])
 
 //user
 Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function () {
+    Route::get('notification', [NotificationController::class, 'unread_user']);
     Route::post('refresh/code', [AuthController::class, 'ref_code']);
     Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_user']);
@@ -52,6 +54,7 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
 });
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
+     Route::get('notification', [NotificationController::class, 'unread_user']);
     Route::post('refresh/code', [AuthController::class, 'ref_code']);
     Route::post('renting', [RentalController::class, 'renting']);
     Route::post('filter/properties', [PropertyController::class, 'filter_seller']);
@@ -83,6 +86,7 @@ Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(func
 });
 //Admin
 Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(function () {
+     Route::get('notification', [NotificationController::class, 'unread_admin']);
     Route::post('request/maintenance', [MaintenanceController::class, 'fixCost']);
     Route::post('approve/seller', [UserController::class, 'approveAccountSeller']);
     Route::get('account/sellers', [UserController::class, 'pendingSellers']);
@@ -102,6 +106,7 @@ Route::prefix('Admin')->middleware(['auth:sanctum', 'CheckAdmin'])->group(functi
 });
 //SuperAdmin
 Route::prefix('SuperAdmin')->middleware(['auth:sanctum', 'CheckSuperAdmin'])->group(function () {
+     Route::get('notification', [NotificationController::class, 'unread_admin']);
     Route::post('add/admin', [\App\Http\Controllers\Admin\AdminController::class, 'addAdmin']);
     Route::post('search/admin', [\App\Http\Controllers\Admin\AdminController::class, 'searchAdmin']);
     Route::post('/property-status-percentages', [PropertyController::class, 'getPropertyStatusReport']);
