@@ -34,66 +34,90 @@ class PropertyController extends Controller
     //no token
     public function filter(Request $request)
     {
-        $properties = Property::where('status', 'available');
-        if ($request->name)
-            $properties->where('name', $request->name);
-        if ($request->room)
-            $properties->where('room', $request->room);
-        if ($request->province) {
-            $province = Province::where('string', $request->province)->first();
+          $properties = Property::with('images')->where('status', 'available');
+
+    if ($request->name)
+        $properties->where('name', $request->name);
+
+    if ($request->room)
+        $properties->where('room', $request->room);
+
+    if ($request->province) {
+        $province = Province::where('string', $request->province)->first();
+        if ($province)
             $properties->where('province_id', $province->id);
-        }
-        if ($request->price_start && $request->price_end)
-            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
-        if ($request->area_start && $request->area_end)
-            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
-        if ($request->type)
-            $properties->where('type', $request->type);
-        $properties = $properties->get();
-        return response()->json($properties, 200);
     }
+
+    if ($request->price_start && $request->price_end)
+        $properties->whereBetween('final_price', [$request->price_start, $request->price_end]);
+
+    if ($request->area_start && $request->area_end)
+        $properties->whereBetween('area', [$request->area_start, $request->area_end]);
+
+    if ($request->type)
+        $properties->where('type', $request->type);
+
+    $properties = $properties->get();
+
+    return response()->json($properties, 200);
+}
     //user
     public function filter_user(Request $request)
     {
-        $user = Auth::user();
-        $properties = Property::where('status', 'available');
-        if ($request->name)
-            $properties->where('name', $request->name);
-        if ($request->room)
-            $properties->where('room', $request->room);
-        if ($request->province) {
-            $province = Province::where('string', $request->province)->first();
+          $user = Auth::user();
+
+    $properties = Property::with('images')
+        ->where('status', 'available');
+
+    if ($request->name)
+        $properties->where('name', $request->name);
+
+    if ($request->room)
+        $properties->where('room', $request->room);
+
+    if ($request->province) {
+        $province = Province::where('string', $request->province)->first();
+        if ($province)
             $properties->where('province_id', $province->id);
-        }
-        if ($request->price_start && $request->price_end)
-            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
-        if ($request->area_start && $request->area_end)
-            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
-        if ($request->type)
-            $properties->where('type', $request->type);
-        $properties = $properties->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
+    }
+
+    if ($request->price_start && $request->price_end)
+        $properties->whereBetween('final_price', [$request->price_start, $request->price_end]);
+
+    if ($request->area_start && $request->area_end)
+        $properties->whereBetween('area', [$request->area_start, $request->area_end]);
+
+    if ($request->type)
+        $properties->where('type', $request->type);
+
+    $properties = $properties->get();
+
+    foreach ($properties as $property) {
+        $property->is_favorite = DB::table('favorites')
+            ->where('property_id', $property->id)
+            ->where('user_id', $user->id)
+            ->exists();
+    }
+
+    return response()->json($properties, 200);
     }
     //admin and suberadmin
     public function filter_admin(Request $request)
-    {
-        $properties = Property::query();
-        if ($request->status)
-            $properties->where('status', $request->status);
-        if ($request->name_seller) {
-            $seller = User::where('name', $request->name_seller)->first();
+    { $properties = Property::with(['images', 'user']);
+
+    if ($request->status)
+        $properties->where('status', $request->status);
+
+    if ($request->name_seller) {
+        $seller = User::where('name', $request->name_seller)->first();
+        if ($seller)
             $properties->where('seller_id', $seller->id);
-        }
-        if ($request->type)
-            $properties->where('type', $request->type);
-        $properties = $properties->get();
-        return response()->json($properties, 200);
+    }
+
+    if ($request->type)
+        $properties->where('type', $request->type);
+
+    return response()->json($properties->get(), 200);
     }
 
     //seller
@@ -102,30 +126,41 @@ class PropertyController extends Controller
     {
         $user = Auth::user();
 
-        $properties = Property::where('status', 'available');
-        if ($request->name)
-            $properties->where('name', $request->name);
-        if ($request->room)
-            $properties->where('room', $request->room);
-        if ($request->province) {
-            $province = Province::where('string', $request->province)->first();
+    $properties = Property::with('images')
+        ->where('status', 'available')
+        ->where('seller_id', '!=', $user->id); // استبعاد عقارات البائع نفسه
+
+    if ($request->name)
+        $properties->where('name', $request->name);
+
+    if ($request->room)
+        $properties->where('room', $request->room);
+
+    if ($request->province) {
+        $province = Province::where('string', $request->province)->first();
+        if ($province)
             $properties->where('province_id', $province->id);
-        }
-        if ($request->price_start && $request->price_end)
-            $properties->where('final_price', '>=', $request->price_start)->where('final_price', '<=', $request->price_end);
-        if ($request->area_start && $request->area_end)
-            $properties->where('area', '>=', $request->area_start)->where('area', '<=', $request->area_end);
-        if ($request->type)
-            $properties->where('type', $request->type);
-        $properties = $properties->get();
-        $properties = $properties->where('seller_id', '!=', $user->id)->get();
-        for ($i = 0; $i < count($properties); $i++) {
-            if (DB::table('favorites')->where('property_id', $properties[$i]->id)->where('user_id', $user->id)->exists())
-                $properties[$i]['is_favorite'] = true;
-            else
-                $properties[$i]['is_favorite'] = false;
-        }
-        return response()->json($properties, 200);
+    }
+
+    if ($request->price_start && $request->price_end)
+        $properties->whereBetween('final_price', [$request->price_start, $request->price_end]);
+
+    if ($request->area_start && $request->area_end)
+        $properties->whereBetween('area', [$request->area_start, $request->area_end]);
+
+    if ($request->type)
+        $properties->where('type', $request->type);
+
+    $properties = $properties->get();
+
+    foreach ($properties as $property) {
+        $property->is_favorite = DB::table('favorites')
+            ->where('property_id', $property->id)
+            ->where('user_id', $user->id)
+            ->exists();
+    }
+
+    return response()->json($properties, 200);
     }
 
 
