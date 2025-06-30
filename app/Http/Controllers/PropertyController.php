@@ -34,7 +34,8 @@ class PropertyController extends Controller
     //no token
     public function filter(Request $request)
     {
-          $properties = Property::with('images')->where('status', 'available');
+         $properties = Property::with(['images', 'province'])
+        ->where('status', 'available');
 
     if ($request->name)
         $properties->where('name', $request->name);
@@ -66,7 +67,7 @@ class PropertyController extends Controller
     {
           $user = Auth::user();
 
-    $properties = Property::with('images')
+      $properties = Property::with(['images', 'province'])
         ->where('status', 'available');
 
     if ($request->name)
@@ -103,7 +104,8 @@ class PropertyController extends Controller
     }
     //admin and suberadmin
     public function filter_admin(Request $request)
-    { $properties = Property::with(['images', 'user']);
+    {  $properties = Property::with(['images', 'province'])
+        ->where('status', 'available');
 
     if ($request->status)
         $properties->where('status', $request->status);
@@ -126,9 +128,9 @@ class PropertyController extends Controller
     {
         $user = Auth::user();
 
-    $properties = Property::with('images')
+    $properties = Property::with(['images', 'province'])
         ->where('status', 'available')
-        ->where('seller_id', '!=', $user->id); // استبعاد عقارات البائع نفسه
+        ->where('seller_id', '!=', $user->id);  
 
     if ($request->name)
         $properties->where('name', $request->name);
