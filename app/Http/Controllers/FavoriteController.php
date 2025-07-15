@@ -2,9 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use App\Models\Rating;
 
 class FavoriteController extends Controller
 {
@@ -20,15 +22,34 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $favorites = $user->favoriteProperties;
+        $favorites = $user->favoriteProperties()->with('province')->get();
         if ($favorites->isEmpty()) {
             return response()->json([
                 'message' => 'لا توجد عقارات مضافة إلى المفضلة حتى الآن.',
                 'data' => []
             ], 200);
         }
-        return response()->json($favorites);
+        // إضافة تقييم المستخدم ومتوسط التقييم لكل عقار
+        $favoritesWithRating = $favorites->map(function ($property) use ($user) {
+            // جميع التقييمات لهذا العقار
+            $allRatings = Rating::where('property_id', $property->id)->pluck('rating');
+            $avgRating = $allRatings->avg();
+            // تقييم المستخدم الحالي
+            $userRating = Rating::where('property_id', $property->id)
+                ->where('user_id', $user->id)
+                ->value('rating');
+            // إضافتهم للكائن
+            $property->average_rating = $avgRating;
+            $property->user_rating = $userRating;
+            return $property;
+        });
+
+        return response()->json([
+            'message' => 'قائمة العقارات المفضلة',
+            'data' => $favoritesWithRating
+        ], 200);
     }
+
     public function deletefavorite(Request $request)
     {
         $user = Auth::user();
