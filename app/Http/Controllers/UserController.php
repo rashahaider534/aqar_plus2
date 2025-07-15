@@ -23,7 +23,6 @@ class UserController extends Controller
                 'name' => $user->name,
                 'email' => $user->email,
                 'balance' => $user->balance,
-                'phone' => $user->phone,
                 'profile_photo' => $user->profile_photo
 
             ],

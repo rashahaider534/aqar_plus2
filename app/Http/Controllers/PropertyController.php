@@ -62,12 +62,13 @@ class PropertyController extends Controller
 
     return response()->json($properties, 200);
 }
-    //user
-    public function filter_user(Request $request)
-    {
-          $user = Auth::user();
 
-      $properties = Property::with(['images', 'province'])
+   //user
+    public function filter_user(Request $request)
+{
+    $user = Auth::user();
+
+    $properties = Property::with(['images', 'province'])
         ->where('status', 'available');
 
     if ($request->name)
@@ -98,10 +99,17 @@ class PropertyController extends Controller
             ->where('property_id', $property->id)
             ->where('user_id', $user->id)
             ->exists();
+
+        $allRatings = Rating::where('property_id', $property->id)->pluck('rating');
+        $property->average_rating = round($allRatings->avg(), 1);
+
+        $property->user_rating = Rating::where('property_id', $property->id)
+            ->where('user_id', $user->id)
+            ->value('rating');
     }
 
     return response()->json($properties, 200);
-    }
+}
     //admin and suberadmin
     public function filter_admin(Request $request)
     {  $properties = Property::with(['images', 'province'])
@@ -130,7 +138,7 @@ class PropertyController extends Controller
 
     $properties = Property::with(['images', 'province'])
         ->where('status', 'available')
-        ->where('seller_id', '!=', $user->id);  
+        ->where('seller_id', '!=', $user->id);
 
     if ($request->name)
         $properties->where('name', $request->name);
@@ -222,7 +230,7 @@ class PropertyController extends Controller
     }
     public function property_details(Request $request)
     {
-        $property = Property::with('images')->find($request->property_id);
+        $property = Property::with('images','province')->find($request->property_id);
         if (!$property) {
             return response()->json(['message' => 'العقار غير موجود'], 404);
         }
@@ -234,6 +242,10 @@ class PropertyController extends Controller
             $userrating = Rating::where('property_id', $request->property_id)
                 ->where('user_id', $user->id)
                 ->value('rating');
+            $property->is_favorite = DB::table('favorites')
+            ->where('property_id', $property->id)
+            ->where('user_id', $user->id)
+            ->exists();
         }
 
         return response()->json([

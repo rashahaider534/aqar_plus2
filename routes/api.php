@@ -45,7 +45,6 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
     Route::post('logout', [AuthController::class, 'logout']);
     Route::get('showprofile', [UserController::class, 'showprofile']);
     Route::post('checkcode', [AuthController::class, 'checkcode']);
-    Route::get('showprofile', [UserController::class, 'showprofile']);
     Route::post('checkcode', [AuthController::class, 'checkcode']);
     Route::post('buy', [PurchaseController::class, 'Purchase']);
     Route::post('update/profilephoto', [UserController::class, 'updatephoto']);
@@ -61,6 +60,7 @@ Route::prefix('user')->middleware(['auth:sanctum', 'CheckUser'])->group(function
 //seller
 Route::prefix('seller')->middleware(['auth:sanctum', 'CheckSeller'])->group(function () {
     Route::post('reject/maintenance', [MaintenanceController::class, 'rejectMaintenance']);
+    Route::get('showprofile', [UserController::class, 'showprofile']);
       Route::post('approve/maintenance', [MaintenanceController::class, 'approveMaintenance']);
     Route::post('add/maintenance', [MaintenanceController::class, 'addMaintenance']);
     Route::post('mark/notification', [NotificationController::class, 'markAsRead_user']);
