@@ -13,6 +13,14 @@ class FavoriteController extends Controller
     public function favorite(Request $request)
     {
         $user = Auth::user();
+        $exists = DB::table('favorites')
+            ->where('property_id', $request->property_id)
+            ->where('user_id', $user->id)
+            ->exists();
+
+        if ($exists) {
+            return response()->json(['message' => 'العقار موجود بالفعل في المفضلة'], 409); // 409 Conflict
+        }
         DB::table('favorites')->insert([
             'property_id' => $request->property_id,
             'user_id' => $user->id
@@ -22,7 +30,7 @@ class FavoriteController extends Controller
     public function index()
     {
         $user = Auth::user();
-        $favorites = $user->favoriteProperties()->with('province')->get();
+        $favorites = $user->favoriteProperties()->with('province','images')->get();
         if ($favorites->isEmpty()) {
             return response()->json([
                 'message' => 'لا توجد عقارات مضافة إلى المفضلة حتى الآن.',
